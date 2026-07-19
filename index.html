@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>DJ Vlex — Urban • Perreo • Santiago</title>
 <meta name="description" content="DJ Vlex especializado en música urbana y perreo. Residencias en La Virgen (Providencia / Las Condes) y Trinity Restobar (La Florida), Santiago. Contacto directo por WhatsApp.">
 <meta property="og:title" content="DJ Vlex — Música Urbana en Vivo">
@@ -20,15 +20,13 @@
   --neon-cyan: #00f0ff;
   --neon-purple: #8a2be2;
   --neon-amber: #ffb800;
-  --neon-red: #ff003c;
   --bg-dark: #050508;
-  --glass-bg: rgba(20, 20, 25, 0.4);
+  --glass-bg: rgba(20, 20, 25, 0.42);
   --glass-border: rgba(255, 255, 255, 0.12);
   --glass-highlight: rgba(255, 255, 255, 0.3);
   --text-main: #f0f4f8;
   --text-muted: #a0aec0;
 }
-
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
@@ -37,101 +35,28 @@ body {
   color: var(--text-main);
   line-height: 1.6;
   min-height: 100vh;
-  position: relative;
   overflow-x: hidden;
 }
 
-/* 🌃 URBAN NIGHT / BOKEH BACKGROUND */
-.ambient-bg {
-  position: fixed;
-  top: 0; left: 0; width: 100vw; height: 100vh;
-  z-index: -1;
-  overflow: hidden;
-  background: #000;
-}
-
-/* Nebulosas lejanas, apenas visibles */
-.bokeh {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(110px);
-  opacity: 0.13;
-  mix-blend-mode: screen;
-}
-
-/* Viñeta de profundidad: oscurece los bordes para sensación de vacío infinito */
+/* 🌌 ESCENA 3D WEBGL — fondo inmersivo */
+#scene3d { position: fixed; inset: 0; z-index: -2; display: block; }
 .vignette {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.85) 100%);
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 30%, rgba(0,0,0,0.88) 100%);
 }
-.bokeh-1 {
-  width: 45vw; height: 45vw;
-  background: var(--neon-amber); /* Luces de calle / focos amarillos */
-  top: 5%; left: -15%;
-  animation: moveBokeh1 25s ease-in-out infinite alternate;
-}
-.bokeh-2 {
-  width: 35vw; height: 35vw;
-  background: var(--neon-red); /* Luces de freno rojas de autos */
-  bottom: 10%; right: -10%;
-  animation: moveBokeh2 20s ease-in-out infinite alternate;
-}
-.bokeh-3 {
-  width: 55vw; height: 55vw;
-  background: var(--neon-cyan); /* Letreros de neón fríos */
-  top: -15%; right: 15%;
-  animation: moveBokeh3 30s ease-in-out infinite alternate;
-}
-.bokeh-4 {
-  width: 30vw; height: 30vw;
-  background: var(--neon-pink); /* Neón urbano rosado */
-  bottom: -5%; left: 25%;
-  animation: moveBokeh4 18s ease-in-out infinite alternate;
-}
-
-@keyframes moveBokeh1 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(25vw, 15vh) scale(1.1); }
-}
-@keyframes moveBokeh2 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-30vw, -10vh) scale(1.3); }
-}
-@keyframes moveBokeh3 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(-15vw, 15vh) scale(0.9); }
-}
-@keyframes moveBokeh4 {
-  0% { transform: translate(0, 0) scale(1); }
-  100% { transform: translate(35vw, -15vh) scale(1.2); }
-}
-
-/* Polvo de la ciudad / Ruido ambiental */
 .noise {
-  position: fixed;
-  top: 0; left: 0; right: 0; bottom: 0;
+  position: fixed; inset: 0; z-index: -1; pointer-events: none;
   background-image: url('data:image/svg+xml,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)" opacity="0.04"/%3E%3C/svg%3E');
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* Campo de estrellas / viaje inmersivo */
-#starfield {
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  mix-blend-mode: screen;
 }
 
 .container { max-width: 1100px; margin: 0 auto; padding: 0 24px; position: relative; z-index: 10; }
 a { color: var(--neon-cyan); text-decoration: none; transition: all 0.3s ease; }
 a:hover { color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
 
-/* IMMERSIVE GLASSMORPHISM */
+/* Secciones con perspectiva para el tilt 3D */
+section { perspective: 1400px; }
+
+/* GLASSMORPHISM 3D */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(40px) saturate(200%);
@@ -139,30 +64,42 @@ a:hover { color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
   border: 1px solid var(--glass-border);
   box-shadow: 0 25px 50px rgba(0,0,0,0.5), inset 0 2px 0 rgba(255,255,255,0.15);
   border-radius: 28px;
-  transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.5s ease, border-color 0.5s ease;
+  transition: box-shadow 0.4s ease, border-color 0.4s ease;
   position: relative;
   overflow: hidden;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
-/* Efecto de destello (glare) en el cristal superior */
 .glass-panel::after {
   content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; height: 30%;
+  position: absolute; top: 0; left: 0; right: 0; height: 30%;
   background: linear-gradient(180deg, rgba(255,255,255,0.08) 0%, transparent 100%);
   pointer-events: none;
 }
+/* Reflejo dinámico que sigue al mouse (via --gx/--gy en JS) */
+.glass-panel::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(circle at var(--gx, 50%) var(--gy, 50%), rgba(255,255,255,0.14) 0%, transparent 55%);
+  opacity: 0; transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 1;
+}
+.glass-panel:hover::before { opacity: 1; }
 .glass-panel:hover {
-  transform: translateY(-10px) scale(1.03);
   border-color: var(--glass-highlight);
   box-shadow: 0 40px 80px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.3), 0 0 50px rgba(0, 240, 255, 0.15);
 }
+/* Contenido de la tarjeta flota sobre el cristal */
+.glass-panel > * { transform: translateZ(30px); }
+
+/* Reveal 3D al hacer scroll */
+.reveal { opacity: 0; transform: translateY(60px) rotateX(12deg) scale(0.96); transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.16, 1, 0.3, 1); }
+.reveal.in { opacity: 1; transform: translateY(0) rotateX(0) scale(1); }
 
 /* BUTTONS */
 .btn-glass {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
   background: rgba(255, 255, 255, 0.08);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -171,13 +108,11 @@ a:hover { color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
   padding: 16px 36px;
   border-radius: 100px;
   font-family: 'Space Grotesk', sans-serif;
-  font-weight: 700;
-  font-size: 1.1rem;
+  font-weight: 700; font-size: 1.1rem;
   cursor: pointer;
   box-shadow: 0 10px 20px rgba(0,0,0,0.4), inset 0 2px 0 rgba(255,255,255,0.15);
   transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  text-transform: uppercase; letter-spacing: 1px;
 }
 .btn-glass:hover {
   background: rgba(255, 255, 255, 0.15);
@@ -197,14 +132,11 @@ a:hover { color: #fff; text-shadow: 0 0 10px var(--neon-cyan); }
   box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.4), 0 0 40px rgba(255, 0, 127, 0.6);
 }
 
-/* HEADER - FLOATING CAPSULE */
+/* HEADER */
 .header-wrapper {
-  position: fixed;
-  top: 24px; left: 0; right: 0;
-  display: flex;
-  justify-content: center;
-  z-index: 1000;
-  padding: 0 20px;
+  position: fixed; top: 24px; left: 0; right: 0;
+  display: flex; justify-content: center;
+  z-index: 1000; padding: 0 20px;
 }
 header {
   background: rgba(15, 15, 20, 0.65);
@@ -213,156 +145,97 @@ header {
   border: 1px solid var(--glass-border);
   border-radius: 100px;
   padding: 14px 36px;
-  display: flex;
-  align-items: center;
-  gap: 40px;
+  display: flex; align-items: center; gap: 40px;
   box-shadow: 0 20px 40px rgba(0,0,0,0.7), inset 0 2px 0 rgba(255,255,255,0.15);
 }
-.logo {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #fff, var(--text-muted));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-.logo em { font-style: normal; color: var(--neon-pink); -webkit-text-fill-color: var(--neon-pink); text-shadow: 0 0 15px rgba(255,0,127,0.5); }
 .logo img { height: 30px; width: auto; display: block; filter: drop-shadow(0 0 10px rgba(255,0,127,0.35)); }
 nav { display: flex; gap: 24px; }
 nav a {
-  font-size: 0.95rem;
-  font-weight: 600;
+  font-size: 0.95rem; font-weight: 600;
   color: var(--text-muted);
-  text-transform: uppercase;
-  letter-spacing: 1px;
+  text-transform: uppercase; letter-spacing: 1px;
 }
 nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
 
 /* HERO */
-.hero { padding: 220px 0 120px; text-align: center; position: relative; }
+.hero { padding: 200px 0 100px; text-align: center; position: relative; min-height: 100vh; display: flex; align-items: center; }
+.hero .container { width: 100%; }
 .hero .tagline {
   display: inline-block;
-  padding: 10px 20px;
-  border-radius: 100px;
+  padding: 10px 20px; border-radius: 100px;
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
   backdrop-filter: blur(10px);
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.95rem;
-  color: var(--neon-cyan);
-  margin-bottom: 30px;
-  letter-spacing: 2px;
-  text-transform: uppercase;
+  font-size: 0.95rem; color: var(--neon-cyan);
+  margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
 }
-.hero h1 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: clamp(4rem, 9vw, 7rem);
-  font-weight: 800;
-  margin-bottom: 24px;
-  line-height: 1;
-  letter-spacing: -3px;
-  color: #fff;
-  text-shadow: 0 10px 30px rgba(0,0,0,0.8), 0 0 40px rgba(255,255,255,0.2);
-}
-.hero h1 span {
-  background: linear-gradient(135deg, var(--neon-pink), var(--neon-cyan));
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  position: relative;
-  filter: drop-shadow(0 0 25px rgba(255, 0, 127, 0.5));
-}
+/* Logo con parallax 3D (movido por JS) */
+.hero-logo-wrap { transform-style: preserve-3d; will-change: transform; }
 .hero-logo {
-  width: min(85%, 620px);
-  height: auto;
-  margin: 0 auto;
-  display: block;
+  width: min(85%, 620px); height: auto;
+  margin: 0 auto; display: block;
   filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 45px rgba(255, 0, 127, 0.4));
+  animation: heroFloat 6s ease-in-out infinite;
+}
+@keyframes heroFloat {
+  0%, 100% { transform: translateY(0) rotateX(0deg); }
+  50% { transform: translateY(-16px) rotateX(3deg); }
 }
 .hero p {
-  font-size: 1.3rem;
-  color: #d1d5db;
-  max-width: 680px;
-  margin: 0 auto 50px;
-  line-height: 1.8;
-  font-weight: 300;
+  font-size: 1.3rem; color: #d1d5db;
+  max-width: 680px; margin: 20px auto 50px;
+  line-height: 1.8; font-weight: 300;
   text-shadow: 0 2px 8px rgba(0,0,0,0.9);
 }
-.hero .cta {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
+.hero .cta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.scroll-hint {
+  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
+  color: var(--text-muted); font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+  animation: hintPulse 2.5s ease-in-out infinite;
+}
+@keyframes hintPulse {
+  0%, 100% { opacity: 0.4; transform: translate(-50%, 0); }
+  50% { opacity: 1; transform: translate(-50%, 8px); }
 }
 
 /* STATS */
 .stats { margin-top: 40px; margin-bottom: 120px; }
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
-}
-.stat-card {
-  padding: 40px 20px;
-  text-align: center;
-}
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+.stat-card { padding: 40px 20px; text-align: center; }
 .stat-card .num {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 3.8rem;
-  font-weight: 700;
+  font-size: 3.8rem; font-weight: 700;
   background: linear-gradient(to bottom, #fff, rgba(255,255,255,0.4));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  display: block;
-  margin-bottom: 10px;
-  line-height: 1;
+  display: block; margin-bottom: 10px; line-height: 1;
   filter: drop-shadow(0 0 15px rgba(255,255,255,0.15));
 }
 .stat-card .label {
-  font-size: 0.9rem;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  color: var(--neon-cyan);
-  font-weight: 600;
+  font-size: 0.9rem; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--neon-cyan); font-weight: 600;
 }
 
-/* SECTIONS */
 section h2 {
   font-family: 'Space Grotesk', sans-serif;
-  font-size: 3.2rem;
-  text-align: center;
-  margin-bottom: 60px;
-  letter-spacing: -2px;
-  font-weight: 700;
+  font-size: 3.2rem; text-align: center;
+  margin-bottom: 60px; letter-spacing: -2px; font-weight: 700;
   text-shadow: 0 5px 20px rgba(0,0,0,0.6);
 }
 
 /* RESIDENCIAS */
 .residencias { padding: 80px 0; }
-.lugares {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-  gap: 40px;
-}
-.lugar {
-  padding: 50px 40px;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
+.lugares { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; }
+.lugar { padding: 50px 40px; display: flex; flex-direction: column; height: 100%; }
 .lugar-icon {
   width: 70px; height: 70px;
   background: rgba(255,255,255,0.05);
   border: 1px solid var(--glass-border);
   border-radius: 20px;
   display: flex; align-items: center; justify-content: center;
-  font-size: 2.5rem;
-  margin-bottom: 30px;
+  font-size: 2.5rem; margin-bottom: 30px;
   box-shadow: inset 0 2px 0 rgba(255,255,255,0.15), 0 10px 20px rgba(0,0,0,0.2);
 }
 .lugar h3 { font-family: 'Space Grotesk', sans-serif; font-size: 2.2rem; margin-bottom: 16px; font-weight: 700; color: #fff; }
@@ -371,64 +244,30 @@ section h2 {
 
 /* STACK */
 .stack { padding: 120px 0; }
-.stack-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 30px;
-}
-.skill {
-  padding: 40px 30px;
-}
-.skill::before {
-  content: ''; position: absolute; top: 0; left: 0; width: 6px; height: 100%;
-  background: linear-gradient(to bottom, var(--neon-cyan), transparent);
-  border-radius: 6px 0 0 6px;
-  opacity: 0.6; transition: opacity 0.3s;
-}
-.skill:hover::before { opacity: 1; box-shadow: 0 0 25px var(--neon-cyan); }
+.stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+.skill { padding: 40px 30px; }
 .skill h4 {
-  font-size: 1rem;
-  text-transform: uppercase;
-  color: var(--neon-cyan);
-  margin-bottom: 12px;
-  letter-spacing: 2.5px;
-  font-weight: 600;
+  font-size: 1rem; text-transform: uppercase;
+  color: var(--neon-cyan); margin-bottom: 12px;
+  letter-spacing: 2.5px; font-weight: 600;
 }
 .skill p { font-size: 1.15rem; color: #fff; font-weight: 300; line-height: 1.5; }
 
 /* CONTACTO */
 .contacto { padding: 120px 0 160px; text-align: center; }
-.contacto-card {
-  max-width: 850px;
-  margin: 0 auto;
-  padding: 80px 50px;
-}
-.contacto p {
-  font-size: 1.3rem;
-  color: #d1d5db;
-  max-width: 550px;
-  margin: 0 auto 50px;
-  font-weight: 300;
-}
-.contacto .links {
-  display: flex;
-  gap: 20px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 50px;
-}
+.contacto-card { max-width: 850px; margin: 0 auto; padding: 80px 50px; }
+.contacto p { font-size: 1.3rem; color: #d1d5db; max-width: 550px; margin: 0 auto 50px; font-weight: 300; }
+.contacto .links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
-/* FOOTER */
 footer {
-  padding: 40px 0;
-  text-align: center;
+  padding: 40px 0; text-align: center;
   border-top: 1px solid rgba(255,255,255,0.08);
   background: rgba(5,5,10,0.6);
   backdrop-filter: blur(15px);
+  position: relative; z-index: 10;
 }
 footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
 
-/* RESPONSIVE */
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
   .header-wrapper { padding: 0 16px; top: 16px; }
@@ -437,24 +276,19 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
 }
 @media (max-width: 600px) {
   .stats-grid { grid-template-columns: 1fr; }
-  .hero h1 { font-size: 4rem; }
   .hero .cta { flex-direction: column; }
   .btn-glass { width: 100%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-logo, .scroll-hint { animation: none; }
+  .reveal { opacity: 1; transform: none; transition: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- 🌃 Noche Urbana / Bokeh -->
-<div class="ambient-bg">
-  <div class="bokeh bokeh-1"></div>
-  <div class="bokeh bokeh-2"></div>
-  <div class="bokeh bokeh-3"></div>
-  <div class="bokeh bokeh-4"></div>
-</div>
-<!-- Polvo ambiental urbano -->
+<canvas id="scene3d" aria-hidden="true"></canvas>
 <div class="noise"></div>
-<canvas id="starfield" aria-hidden="true"></canvas>
 <div class="vignette"></div>
 
 <div class="header-wrapper">
@@ -471,43 +305,34 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
 <section class="hero">
   <div class="container">
     <div class="tagline">🔥 Urban Vibes • Noches Inmersivas</div>
-    <h1><img class="hero-logo" src="images/djvlex-wordmark.png" alt="DJ Vlex"></h1>
+    <div class="hero-logo-wrap" id="heroLogo">
+      <h1><img class="hero-logo" src="images/djvlex-wordmark.png" alt="DJ Vlex"></h1>
+    </div>
     <p>Especialista en ritmos urbanos. Residente en La Virgen y Trinity Restobar. Transmitiendo en vivo desde el corazón de Santiago de Chile.</p>
     <div class="cta">
       <button class="btn-glass btn-primary" onclick="document.getElementById('contacto').scrollIntoView()">Contactar Ahora</button>
       <a href="https://www.tiktok.com/@djvlex_" target="_blank" class="btn-glass">Ver en TikTok Live</a>
     </div>
   </div>
+  <div class="scroll-hint">▼ Entra al túnel</div>
 </section>
 
 <section class="stats">
   <div class="container">
     <div class="stats-grid">
-      <div class="stat-card glass-panel">
-        <span class="num">500K</span>
-        <span class="label">Oyentes</span>
-      </div>
-      <div class="stat-card glass-panel">
-        <span class="num">24/7</span>
-        <span class="label">Streams Live</span>
-      </div>
-      <div class="stat-card glass-panel">
-        <span class="num">2</span>
-        <span class="label">Residencias</span>
-      </div>
-      <div class="stat-card glass-panel">
-        <span class="num">6+</span>
-        <span class="label">Años Escena</span>
-      </div>
+      <div class="stat-card glass-panel reveal"><span class="num">500K</span><span class="label">Oyentes</span></div>
+      <div class="stat-card glass-panel reveal"><span class="num">24/7</span><span class="label">Streams Live</span></div>
+      <div class="stat-card glass-panel reveal"><span class="num">2</span><span class="label">Residencias</span></div>
+      <div class="stat-card glass-panel reveal"><span class="num">6+</span><span class="label">Años Escena</span></div>
     </div>
   </div>
 </section>
 
 <section class="residencias" id="residencias">
   <div class="container">
-    <h2>Residencias Oficiales</h2>
+    <h2 class="reveal">Residencias Oficiales</h2>
     <div class="lugares">
-      <div class="lugar glass-panel">
+      <div class="lugar glass-panel reveal">
         <div class="lugar-icon">🎉</div>
         <h3>La Virgen</h3>
         <p>Sets en vivo cargados de black music, reggaetón old school y hits del momento.</p>
@@ -517,7 +342,7 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
         </div>
         <a href="https://wa.me/56991261916?text=Hola%20DJ%20Vlex%2C%20me%20gustar%C3%ADa%20ir%20a%20La%20Virgen" target="_blank" class="btn-glass" style="width:100%; font-size: 0.95rem;">Reservar Mesa</a>
       </div>
-      <div class="lugar glass-panel">
+      <div class="lugar glass-panel reveal">
         <div class="lugar-icon">🍹</div>
         <h3>Trinity Restobar</h3>
         <p>Perreo intenso y trap latino, con el mejor ambiente de la zona sur de Santiago.</p>
@@ -533,52 +358,32 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
 
 <section class="stack" id="setup">
   <div class="container">
-    <h2>Immersive Setup</h2>
+    <h2 class="reveal">Immersive Setup</h2>
     <div class="stack-grid">
-      <div class="skill glass-panel">
-        <h4>Controlador</h4>
-        <p>Pioneer DDJ-REV1<br><small style="opacity: 0.7; font-size: 0.9rem;">2 decks + sampler + efecto</small></p>
-      </div>
-      <div class="skill glass-panel">
-        <h4>Software</h4>
-        <p>Serato DJ Pro 3.0<br><small style="opacity: 0.7; font-size: 0.9rem;">Scratch, cueing, hot cues</small></p>
-      </div>
-      <div class="skill glass-panel">
-        <h4>Streaming</h4>
-        <p>iRig Stream → iPhone<br><small style="opacity: 0.7; font-size: 0.9rem;">Transmisión HQ a TikTok Live</small></p>
-      </div>
-      <div class="skill glass-panel">
-        <h4>Géneros</h4>
-        <p>Urbano / Perreo<br><small style="opacity: 0.7; font-size: 0.9rem;">Reggaeton, Trap Latino</small></p>
-      </div>
-      <div class="skill glass-panel">
-        <h4>Experiencia</h4>
-        <p>6+ Años<br><small style="opacity: 0.7; font-size: 0.9rem;">Escena nocturna de Santiago</small></p>
-      </div>
-      <div class="skill glass-panel">
-        <h4>Playlist</h4>
-        <p>Actualización Semanal<br><small style="opacity: 0.7; font-size: 0.9rem;"><a href="https://open.spotify.com" target="_blank">Escuchar en Spotify</a></small></p>
-      </div>
+      <div class="skill glass-panel reveal"><h4>Controlador</h4><p>Pioneer DDJ-REV1<br><small style="opacity: 0.7; font-size: 0.9rem;">2 decks + sampler + efecto</small></p></div>
+      <div class="skill glass-panel reveal"><h4>Software</h4><p>Serato DJ Pro 3.0<br><small style="opacity: 0.7; font-size: 0.9rem;">Scratch, cueing, hot cues</small></p></div>
+      <div class="skill glass-panel reveal"><h4>Streaming</h4><p>iRig Stream → iPhone<br><small style="opacity: 0.7; font-size: 0.9rem;">Transmisión HQ a TikTok Live</small></p></div>
+      <div class="skill glass-panel reveal"><h4>Géneros</h4><p>Urbano / Perreo<br><small style="opacity: 0.7; font-size: 0.9rem;">Reggaeton, Trap Latino</small></p></div>
+      <div class="skill glass-panel reveal"><h4>Experiencia</h4><p>6+ Años<br><small style="opacity: 0.7; font-size: 0.9rem;">Escena nocturna de Santiago</small></p></div>
+      <div class="skill glass-panel reveal"><h4>Playlist</h4><p>Actualización Semanal<br><small style="opacity: 0.7; font-size: 0.9rem;"><a href="https://open.spotify.com" target="_blank">Escuchar en Spotify</a></small></p></div>
     </div>
   </div>
 </section>
 
 <section class="contacto" id="contacto">
   <div class="container">
-    <div class="contacto-card glass-panel">
+    <div class="contacto-card glass-panel reveal">
       <h2>Conecta Conmigo</h2>
       <p>¿Tienes un evento privado, fiesta corporativa o quieres colaborar? Escríbeme y hagamos que la noche sea inolvidable.</p>
-      
       <div class="links">
         <a href="https://wa.me/56991261916?text=Hola%20DJ%20Vlex%2C%20quiero%20contratarte" target="_blank" class="btn-glass btn-primary">💬 WhatsApp</a>
         <a href="https://www.instagram.com/djvlex_/" target="_blank" class="btn-glass">📸 Instagram</a>
         <a href="https://www.tiktok.com/@djvlex_" target="_blank" class="btn-glass">🎵 TikTok</a>
       </div>
-      
       <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 15px;">
-        <a href="mailto:alexispferrada@gmail.com" style="display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-main); font-size: 1.1rem;">
+        <a href="/cdn-cgi/l/email-protection#27464b425f4e54574142555546434667404a464e4b0944484a" style="display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-main); font-size: 1.1rem;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          alexispferrada@gmail.com
+          <span class="__cf_email__" data-cfemail="caaba6afb2a3b9baacafb8b8abaeab8aada7aba3a6e4a9a5a7">[email&#160;protected]</span>
         </a>
         <span style="display: flex; align-items: center; justify-content: center; gap: 12px; color: var(--text-main); font-size: 1.1rem;">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
@@ -595,111 +400,272 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
   </div>
 </footer>
 
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 <script>
-/* 🌌 Viaje por el universo: campo de estrellas warp-speed, reactivo a mouse y scroll */
+/* ═══════════════════════════════════════════════════════
+   🌌 ESCENA 3D INMERSIVA — Three.js
+   Túnel de partículas warp + grilla neón infinita +
+   vinilo 3D girando + cámara que viaja con el scroll
+   ═══════════════════════════════════════════════════════ */
 (function () {
-  var canvas = document.getElementById('starfield');
-  if (!canvas || !canvas.getContext) return;
-  var ctx = canvas.getContext('2d');
+  var canvas = document.getElementById('scene3d');
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var colors = ['#00f0ff', '#ff007f', '#8a2be2', '#ffb800'];
-  var dpr = Math.min(window.devicePixelRatio || 1, 2);
-  var w, h, cx, cy, stars, count;
+  if (!window.THREE || !canvas) return;
 
-  function spawn(s) {
-    s.x = (Math.random() * 2 - 1) * w;
-    s.y = (Math.random() * 2 - 1) * h;
-    s.z = w;
-    s.pz = s.z;
-    s.c = colors[(Math.random() * colors.length) | 0];
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+  } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x030306);
+  scene.fog = new THREE.FogExp2(0x030306, 0.016);
+
+  var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 400);
+  camera.position.set(0, 0, 10);
+
+  var PALETTE = [0xff007f, 0x00f0ff, 0x8a2be2, 0xffb800];
+
+  /* ── Túnel de partículas (warp) ── */
+  var COUNT = window.innerWidth < 700 ? 1500 : 3500;
+  var TUNNEL_LEN = 260;
+  var positions = new Float32Array(COUNT * 3);
+  var colors = new Float32Array(COUNT * 3);
+  var col = new THREE.Color();
+  for (var i = 0; i < COUNT; i++) {
+    var angle = Math.random() * Math.PI * 2;
+    var radius = 6 + Math.random() * 26;
+    positions[i * 3] = Math.cos(angle) * radius;
+    positions[i * 3 + 1] = Math.sin(angle) * radius;
+    positions[i * 3 + 2] = -Math.random() * TUNNEL_LEN;
+    col.setHex(PALETTE[(Math.random() * PALETTE.length) | 0]);
+    colors[i * 3] = col.r; colors[i * 3 + 1] = col.g; colors[i * 3 + 2] = col.b;
+  }
+  var pGeo = new THREE.BufferGeometry();
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+  var pMat = new THREE.PointsMaterial({
+    size: 0.35, vertexColors: true, transparent: true, opacity: 0.9,
+    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
+  });
+  var particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
+
+  /* ── Grillas neón infinitas (piso y techo) ── */
+  function makeGrid(y, c1, c2) {
+    var g = new THREE.GridHelper(400, 80, c1, c2);
+    g.position.y = y;
+    g.material.transparent = true;
+    g.material.opacity = 0.22;
+    g.material.blending = THREE.AdditiveBlending;
+    g.material.depthWrite = false;
+    scene.add(g);
+    return g;
+  }
+  var gridFloor = makeGrid(-14, 0xff007f, 0x2a0a3a);
+  var gridCeil  = makeGrid(16, 0x00f0ff, 0x0a2a3a);
+
+  /* ── Anillos del túnel ── */
+  var rings = [];
+  var ringGeo = new THREE.TorusGeometry(15, 0.07, 8, 72);
+  for (var r = 0; r < 12; r++) {
+    var rMat = new THREE.MeshBasicMaterial({
+      color: PALETTE[r % PALETTE.length], transparent: true, opacity: 0.35,
+      blending: THREE.AdditiveBlending
+    });
+    var ring = new THREE.Mesh(ringGeo, rMat);
+    ring.position.z = -r * 24;
+    scene.add(ring);
+    rings.push(ring);
   }
 
-  function resize() {
-    w = window.innerWidth;
-    h = window.innerHeight;
-    canvas.width = w * dpr;
-    canvas.height = h * dpr;
-    canvas.style.width = w + 'px';
-    canvas.style.height = h + 'px';
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    cx = w / 2;
-    cy = h / 2;
-  }
-
-  function init() {
-    count = window.innerWidth < 700 ? 220 : 520;
-    stars = [];
-    for (var i = 0; i < count; i++) {
-      var s = {};
-      spawn(s);
-      s.z = Math.random() * w;
-      s.pz = s.z;
-      stars.push(s);
+  /* ── Logos 3D flotando en el túnel (pasan hacia la cámara) ── */
+  var logoPlanes = [];
+  new THREE.TextureLoader().load('images/djvlex-logo.png', function (tex) {
+    var aspect = tex.image.width / tex.image.height;
+    var LOGO_N = 7;
+    for (var li = 0; li < LOGO_N; li++) {
+      var lh = 8, lw = lh * aspect;
+      var mat = new THREE.MeshBasicMaterial({
+        map: tex, transparent: true, opacity: 0.95,
+        depthWrite: false, side: THREE.DoubleSide
+      });
+      var plane = new THREE.Mesh(new THREE.PlaneGeometry(lw, lh), mat);
+      var side = li % 2 === 0 ? 1 : -1;
+      plane.position.set(side * (7 + Math.random() * 5), (Math.random() - 0.5) * 8, -25 - li * 34);
+      plane.rotation.y = -side * 0.5;
+      plane.userData = { side: side, seed: Math.random() * Math.PI * 2 };
+      scene.add(plane);
+      logoPlanes.push(plane);
     }
-  }
-
-  resize();
-  init();
-  window.addEventListener('resize', function () { resize(); init(); });
-
-  var mx = 0, my = 0;
-  window.addEventListener('mousemove', function (e) {
-    mx = (e.clientX - cx) / cx;
-    my = (e.clientY - cy) / cy;
   });
 
+  /* ── Luces ── */
+  scene.add(new THREE.AmbientLight(0x223344, 0.6));
+  var lightPink = new THREE.PointLight(0xff007f, 3.5, 90);
+  lightPink.position.set(-18, 10, -20);
+  scene.add(lightPink);
+  var lightCyan = new THREE.PointLight(0x00f0ff, 3.5, 90);
+  lightCyan.position.set(18, -10, -25);
+  scene.add(lightCyan);
+  var lightPurple = new THREE.PointLight(0x8a2be2, 2.5, 70);
+  lightPurple.position.set(0, 16, -40);
+  scene.add(lightPurple);
+
+  /* ── Interacción: mouse + scroll + boost ── */
+  var mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('mousemove', function (e) {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
+  });
   var boost = 0;
   window.addEventListener('wheel', function (e) {
-    boost = Math.min(boost + Math.abs(e.deltaY) * 0.012, 14);
+    boost = Math.min(boost + Math.abs(e.deltaY) * 0.004, 5);
   }, { passive: true });
 
+  var scrollProgress = 0;
+  function onScroll() {
+    var max = document.documentElement.scrollHeight - window.innerHeight;
+    scrollProgress = max > 0 ? window.scrollY / max : 0;
+  }
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  window.addEventListener('resize', function () {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  var clock = new THREE.Clock();
+
+  function render() {
+    var t = clock.getElapsedTime();
+    var dt = Math.min(clock.getDelta ? 0.016 : 0.016, 0.05);
+
+    /* Suavizar mouse */
+    mx += (tmx - mx) * 0.05;
+    my += (tmy - my) * 0.05;
+
+    /* Warp de partículas */
+    var speed = (reduceMotion ? 0.6 : 3.2) + boost * 8;
+    boost *= 0.94;
+    var pos = pGeo.attributes.position.array;
+    for (var i = 0; i < COUNT; i++) {
+      pos[i * 3 + 2] += speed * 0.06;
+      if (pos[i * 3 + 2] > camera.position.z + 4) pos[i * 3 + 2] -= TUNNEL_LEN;
+    }
+    pGeo.attributes.position.needsUpdate = true;
+
+    /* Cámara viaja por el túnel con el scroll + parallax con el mouse */
+    var targetZ = 10 - scrollProgress * 150;
+    camera.position.z += (targetZ - camera.position.z) * 0.06;
+    camera.position.x += (mx * 4 - camera.position.x) * 0.04;
+    camera.position.y += (-my * 3 - camera.position.y) * 0.04;
+    camera.lookAt(camera.position.x * 0.4, camera.position.y * 0.4, camera.position.z - 30);
+    camera.rotation.z = mx * 0.05 + Math.sin(t * 0.2) * 0.02;
+
+    /* Anillos: reciclar detrás de la cámara + pulso */
+    for (var r2 = 0; r2 < rings.length; r2++) {
+      var ring = rings[r2];
+      if (ring.position.z > camera.position.z + 6) ring.position.z -= rings.length * 24;
+      var pulse = 1 + Math.sin(t * 2.4 + r2 * 1.3) * 0.04;
+      ring.scale.set(pulse, pulse, 1);
+      ring.rotation.z = t * 0.12 * (r2 % 2 === 0 ? 1 : -1);
+    }
+
+    /* Logos: avanzan hacia la cámara y se reciclan al fondo del túnel */
+    for (var li2 = 0; li2 < logoPlanes.length; li2++) {
+      var lp = logoPlanes[li2];
+      lp.position.z += speed * 0.06;
+      if (lp.position.z > camera.position.z + 6) {
+        lp.position.z -= logoPlanes.length * 34;
+        lp.userData.side *= -1;
+        lp.position.x = lp.userData.side * (7 + Math.random() * 5);
+        lp.position.y = (Math.random() - 0.5) * 8;
+      }
+      lp.rotation.y = -lp.userData.side * 0.5 + Math.sin(t * 0.5 + lp.userData.seed) * 0.12;
+      lp.position.y += Math.sin(t * 0.8 + lp.userData.seed) * 0.008;
+      /* Se desvanece suave al acercarse */
+      var dist = camera.position.z - lp.position.z;
+      lp.material.opacity = Math.min(Math.max(dist / 18, 0), 0.95);
+    }
+
+    /* Grillas siguen a la cámara (infinitas) + luces pulsando al beat */
+    gridFloor.position.z = camera.position.z - 100;
+    gridCeil.position.z = camera.position.z - 100;
+    var beat = 1 + Math.max(0, Math.sin(t * 3.6)) * 0.5;
+    lightPink.intensity = 3.5 * beat;
+    lightCyan.intensity = 3.5 * (2 - beat);
+    lightPink.position.z = camera.position.z - 20;
+    lightCyan.position.z = camera.position.z - 25;
+    lightPurple.position.z = camera.position.z - 40;
+
+    renderer.render(scene, camera);
+    requestAnimationFrame(render);
+  }
+
   if (reduceMotion) {
-    ctx.fillStyle = '#000';
-    ctx.fillRect(0, 0, w, h);
-    ctx.globalAlpha = 0.55;
-    stars.forEach(function (s) {
-      ctx.fillStyle = s.c;
-      ctx.beginPath();
-      ctx.arc((s.x / s.z) * w + cx, (s.y / s.z) * h + cy, 1.1, 0, Math.PI * 2);
-      ctx.fill();
+    /* Un solo frame estático para usuarios con motion reducido */
+    renderer.render(scene, camera);
+  } else {
+    requestAnimationFrame(render);
+  }
+})();
+
+/* ── Tilt 3D en tarjetas de vidrio + reflejo que sigue al mouse ── */
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+  var panels = document.querySelectorAll('.glass-panel');
+  panels.forEach(function (panel) {
+    panel.addEventListener('mousemove', function (e) {
+      var rect = panel.getBoundingClientRect();
+      var px = (e.clientX - rect.left) / rect.width;
+      var py = (e.clientY - rect.top) / rect.height;
+      var rx = (0.5 - py) * 10;
+      var ry = (px - 0.5) * 12;
+      panel.style.transform = 'rotateX(' + rx.toFixed(2) + 'deg) rotateY(' + ry.toFixed(2) + 'deg) translateZ(12px)';
+      panel.style.setProperty('--gx', (px * 100).toFixed(1) + '%');
+      panel.style.setProperty('--gy', (py * 100).toFixed(1) + '%');
     });
-    ctx.globalAlpha = 1;
+    panel.addEventListener('mouseleave', function () {
+      panel.style.transform = 'rotateX(0deg) rotateY(0deg) translateZ(0px)';
+    });
+  });
+})();
+
+/* ── Parallax 3D del logo del hero ── */
+(function () {
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
+  var el = document.getElementById('heroLogo');
+  if (!el) return;
+  window.addEventListener('mousemove', function (e) {
+    var mx = (e.clientX / window.innerWidth - 0.5) * 2;
+    var my = (e.clientY / window.innerHeight - 0.5) * 2;
+    el.style.transform = 'perspective(900px) rotateY(' + (mx * 8).toFixed(2) + 'deg) rotateX(' + (-my * 6).toFixed(2) + 'deg)';
+  });
+})();
+
+/* ── Reveal 3D al hacer scroll ── */
+(function () {
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
     return;
   }
-
-  function draw() {
-    ctx.fillStyle = 'rgba(0,0,0,0.22)';
-    ctx.fillRect(0, 0, w, h);
-
-    var speed = 2.4 + boost;
-    boost *= 0.92;
-    var ox = cx + mx * 40;
-    var oy = cy + my * 40;
-
-    for (var i = 0; i < stars.length; i++) {
-      var s = stars[i];
-      s.pz = s.z;
-      s.z -= speed;
-      if (s.z <= 1) { spawn(s); continue; }
-
-      var sx = (s.x / s.z) * w + ox;
-      var sy = (s.y / s.z) * h + oy;
-      var psx = (s.x / s.pz) * w + ox;
-      var psy = (s.y / s.pz) * h + oy;
-      var depth = 1 - s.z / w;
-
-      ctx.globalAlpha = Math.min(Math.max(depth, 0.18), 1);
-      ctx.strokeStyle = s.c;
-      ctx.lineWidth = Math.max(depth * 3.2, 0.6);
-      ctx.beginPath();
-      ctx.moveTo(psx, psy);
-      ctx.lineTo(sx, sy);
-      ctx.stroke();
-    }
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(draw);
-  }
-  requestAnimationFrame(draw);
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  els.forEach(function (el) { io.observe(el); });
 })();
 </script>
 </body>
