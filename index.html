@@ -259,14 +259,7 @@ section h2 {
 .contacto p { font-size: 1.3rem; color: #d1d5db; max-width: 550px; margin: 0 auto 50px; font-weight: 300; }
 .contacto .links { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; margin-bottom: 50px; }
 
-footer {
-  padding: 40px 0; text-align: center;
-  border-top: 1px solid rgba(255,255,255,0.08);
-  background: rgba(5,5,10,0.6);
-  backdrop-filter: blur(15px);
-  position: relative; z-index: 10;
-}
-footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
+
 
 @media (max-width: 900px) {
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
@@ -394,10 +387,10 @@ footer p { color: var(--text-muted); font-size: 1rem; font-weight: 300; }
   </div>
 </section>
 
-<footer>
-  <div class="container">
-    <p style="display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap">© 2026 <img src="images/djvlex-wordmark.png" alt="DJ Vlex" style="height:16px;width:auto;opacity:0.75"> — Experiencia Inmersiva parte del ecosistema <a href="https://tusitioya.cl" style="font-weight: 600;">TuSitioYa</a></p>
-  </div>
+<footer style="position:relative; z-index:2; margin-top: 40px; padding: 0 20px 40px 20px; max-width: 900px; margin-left: auto; margin-right: auto;">
+  <!-- Footer Inyectado Global (TuSitioYa + Track IA) -->
+  <div id="tusitioya-global-footer"></div>
+  <script src="https://tusitioya.cl/global-footer-loader.js"></script>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
