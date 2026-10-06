@@ -1,40 +1,51 @@
-# 🎧 DJ Vlex — Sitio Web Oficial e Interactivo
+# 🎧 DJ Vlex — Sitio Web Oficial & Ecosistema de Innovación
 
 <div align="center">
 
-# 🎛️ DJ Vlex
+# 🎛️ DJ Vlex (Alexis Ferrada)
 
-**DJ & Productor · Experiencias Musicales en Vivo & Tecnología de Vanguardia**
+**DJ Residente · Founder & Lead Architect de TrackAI y PRE-SET**
 
 [![Sitio Web Oficial](https://img.shields.io/badge/Web-djvlex.tusitioya.cl-00D2FF?style=for-the-badge&logo=googlechrome&logoColor=white)](https://djvlex.tusitioya.cl)
-[![TrackAI.party Copilot](https://img.shields.io/badge/Powered%20By-TrackAI.party-FF0055?style=for-the-badge&logo=electron&logoColor=white)](https://trackai.party)
+[![TrackAI Copilot](https://img.shields.io/badge/Founder-TrackAI.party-FF0055?style=for-the-badge&logo=electron&logoColor=white)](https://trackai.party)
+[![PRE-SET Dataless](https://img.shields.io/badge/Creator-PRE--SET-FF5F2E?style=for-the-badge&logo=apple&logoColor=white)](https://preset.trackai.party)
 
 </div>
 
 ---
 
-## 📌 Descripción
+## 📌 Perfil del Artista & Fundador
 
-Sitio web oficial interactivo para **DJ Vlex**. Diseñado como un presskit y showcase digital que combina diseño moderno, animaciones 3D interactivas con Three.js y visualizaciones reactivas al audio con la Web Audio API.
+**DJ Vlex** (Alexis Ferrada) combina una destacada trayectoria en la escena nocturna de Santiago de Chile (con residencias en **La Virgen** en Providencia/Las Condes y **Trinity Restobar** en La Florida) con su perfil como **ingeniero de software, arquitecto de sistemas y fundador de tecnología para DJs**.
 
----
-
-## ⚡ Conexión con el Ecosistema
-
-DJ Vlex es la raíz musical de proyectos como **[TrackAI.party](https://trackai.party)**, el copiloto de mezcla en tiempo real para DJs creado para resolver la necesidad de transiciones armónicas inmediatas en cabina.
+Su trabajo nace de una premisa clara: **diseñar las soluciones que los DJs realmente necesitan en cabina**, uniendo inteligencia artificial, algoritmos en tiempo real y optimización de sistemas operativos.
 
 ---
 
-## 🛠️ Tecnologías Utilizadas
+## ⚡ Soluciones Creadas para la Industria DJ
 
-- **Frontend:** HTML5 semántico, CSS3 con estética dark club/neon, JavaScript ES6+
-- **Multimedia:** Three.js (render 3D interactivo), Web Audio API (análisis y visualizador de espectro)
-- **Despliegue:** Optimizado para carga ultra rápida y diseño 100% responsivo
+### 1. 🎚️ [TrackAI](https://trackai.party) — Copiloto de Mezcla en Tiempo Real con IA
+- **Problema que resuelve:** La incertidumbre en cabina al seleccionar el track siguiente bajo presión.
+- **Tecnología:** Lectura continua y sin API de `master.sqlite` de Serato DJ Pro cada 3 segundos, modelado armónico en rueda Camelot, detección de BPM en directo con **Live Pitch®**, y un motor multicapa de sugerencias vectoriales que aprende del estilo del DJ con decay temporal.
+- **Seguridad y Licenciamiento:** Criptografía Ed25519 con verificación en tiempo real en edge con Cloudflare Workers.
+
+### 2. 💾 [PRE-SET by TrackAI](https://preset.trackai.party) — Arquitectura Dataless 0 KB para Serato
+- **Problema que resuelve:** El colapso del disco duro de los DJs que viajan o tocan sets largos con terabytes de música.
+- **Tecnología:** Estructura de crates virtuales a 0 KB mediante enlaces APFS en macOS Apple Silicon (M1 a M4), sincronización selectiva con Google Drive y backend de licencias de alta concurrencia en Fastify + PostgreSQL.
+
+---
+
+## 🛠️ Tecnologías del Sitio Web
+
+- **Frontend:** HTML5 semántico, CSS3 con estética dark club/glassmorphism, JavaScript ES6+.
+- **Gráficos 3D:** Three.js (render interactivo de túnel de partículas, grilla neón y vinilo 3D reactivo al scroll).
+- **Audio Reactivo:** Web Audio API para análisis espectral dinámico.
+- **Rendimiento:** Optimizado para carga ultra rápida (< 1.5s) y 100% responsivo para móviles.
 
 ---
 
 <div align="center">
 
-© 2026 **DJ Vlex** · Contacto y contratación: [djvlex.tusitioya.cl](https://djvlex.tusitioya.cl)
+© 2026 **DJ Vlex** (Alexis Ferrada) · [djvlex.tusitioya.cl](https://djvlex.tusitioya.cl) · Booking: +56 9 9126 1916
 
 </div>

@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DJ Vlex — Urban • Perreo • Santiago</title>
-<meta name="description" content="DJ Vlex especializado en música urbana y perreo. Residencias en La Virgen (Providencia / Las Condes) y Trinity Restobar (La Florida), Santiago. Contacto directo por WhatsApp.">
+<title>DJ Vlex — Urban Vibes &amp; Founder de TrackAI y PRE-SET</title>
+<meta name="description" content="DJ Vlex (Alexis Ferrada): Especialista en música urbana en Santiago (La Virgen, Trinity) y Founder &amp; Lead Architect de TrackAI y PRE-SET, plataformas de software e IA para DJs.">
 <meta property="og:title" content="DJ Vlex — Música Urbana en Vivo">
 <meta property="og:description" content="Perreo, reggaeton, trap latino. Santiago de Chile.">
 <meta property="og:url" content="https://djvlex.tusitioya.cl">
@@ -242,6 +242,25 @@ section h2 {
 .lugar p { color: #d1d5db; margin-bottom: 24px; flex-grow: 1; font-weight: 300; font-size: 1.1rem; }
 .lugar .location { font-size: 1rem; color: #fff; opacity: 0.9; margin-bottom: 40px; display: flex; align-items: center; gap: 10px; font-weight: 600; }
 
+/* INNOVACION & FOUNDER */
+.innovacion { padding: 100px 0 60px; }
+.innovacion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
+.innovacion-card { padding: 45px 35px; display: flex; flex-direction: column; position: relative; height: 100%; }
+.innovacion-badge {
+  display: inline-block; align-self: flex-start; font-size: 0.72rem; font-weight: 700;
+  letter-spacing: 1.5px; padding: 6px 14px; border-radius: 20px; margin-bottom: 22px;
+}
+.innovacion-card h3 { font-family: "Space Grotesk", sans-serif; font-size: 2.3rem; margin-bottom: 8px; font-weight: 700; color: #fff; }
+.innovacion-sub { font-size: 1.05rem; color: var(--neon-cyan); font-weight: 600; margin-bottom: 16px; }
+.innovacion-desc { color: #d1d5db; font-size: 1.02rem; line-height: 1.65; margin-bottom: 24px; font-weight: 300; }
+.innovacion-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; }
+.innovacion-tags span {
+  font-size: 0.78rem; padding: 4px 11px; border-radius: 6px;
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12);
+  color: #e2e8f0; font-family: "Space Grotesk", sans-serif;
+}
+.innovacion-card code { font-family: monospace; font-size: 0.9em; background: rgba(0,240,255,0.1); color: var(--neon-cyan); padding: 2px 6px; border-radius: 4px; }
+
 /* STACK */
 .stack { padding: 120px 0; }
 .stack-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
@@ -289,6 +308,7 @@ section h2 {
     <a class="logo" href="#"><img src="images/djvlex-wordmark.png" alt="DJ Vlex"></a>
     <nav>
       <a href="#residencias">Residencias</a>
+      <a href="#innovacion">Tech &amp; AI</a>
       <a href="#setup">Setup</a>
       <a href="#contacto">Contacto</a>
     </nav>
@@ -301,7 +321,7 @@ section h2 {
     <div class="hero-logo-wrap" id="heroLogo">
       <h1><img class="hero-logo" src="images/djvlex-wordmark.png" alt="DJ Vlex"></h1>
     </div>
-    <p>Especialista en ritmos urbanos. Residente en La Virgen y Trinity Restobar. Transmitiendo en vivo desde el corazón de Santiago de Chile.</p>
+    <p>Especialista en ritmos urbanos con residencias en La Virgen y Trinity Restobar. <strong>Founder &amp; Lead Architect</strong> de <strong>TrackAI</strong> y <strong>PRE-SET</strong>, fusionando la energía en vivo con inteligencia artificial y software de vanguardia para DJs.</p>
     <div class="cta">
       <button class="btn-glass btn-primary" onclick="document.getElementById('contacto').scrollIntoView()">Contactar Ahora</button>
       <a href="https://www.tiktok.com/@dj__vlex" target="_blank" class="btn-glass">Ver en TikTok Live</a>
@@ -344,6 +364,82 @@ section h2 {
           La Florida, Santiago
         </div>
         <a href="https://wa.me/56991261916?text=Hola%20DJ%20Vlex%2C%20me%20gustar%C3%ADa%20ir%20a%20Trinity%20Restobar" target="_blank" class="btn-glass" style="width:100%; font-size: 0.95rem;">Reservar Mesa</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="innovacion" id="innovacion">
+  <div class="container">
+    <div style="text-align: center; margin-bottom: 50px;">
+      <div class="tagline" style="display: inline-block; margin-bottom: 16px;">⚡ Tech &amp; DJ Architecture</div>
+      <h2 class="reveal" style="margin-bottom: 16px;">Founder &amp; Creador de Software para DJs</h2>
+      <p style="max-width: 760px; margin: 0 auto; color: var(--text-muted); font-size: 1.15rem;" class="reveal">
+        La experiencia real en cabina llevada al código de máxima precisión. Alexis Ferrada (DJ Vlex) diseña y lidera el desarrollo de las herramientas que están redefiniendo el futuro de los sets en vivo y la gestión de bibliotecas para DJs profesionales.
+      </p>
+    </div>
+
+    <div class="innovacion-grid">
+      <!-- Card 1: TrackAI -->
+      <div class="innovacion-card glass-panel reveal" style="border-left: 3px solid #ff0055;">
+        <div class="innovacion-badge" style="background: rgba(255, 0, 85, 0.15); color: #ff3377; border: 1px solid rgba(255, 0, 85, 0.35);">
+          ⚡ COPILOTO DE MEZCLA CON IA · EN VIVO
+        </div>
+        <h3>TrackAI</h3>
+        <p class="innovacion-sub">Inteligencia artificial que escucha tu set en tiempo real.</p>
+        <p class="innovacion-desc">
+          Analiza <code>master.sqlite</code> de Serato DJ Pro en vivo cada 3 segundos, calculando afinidad armónica Camelot y BPM adaptativo con <strong>Live Pitch®</strong>. Recomienda el próximo track sin latencia para mantener el pulso exacto de la pista.
+        </p>
+        <div class="innovacion-tags">
+          <span>Live Pitch®</span>
+          <span>Camelot Engine</span>
+          <span>Espacio Vectorial</span>
+          <span>Ed25519 Tokens</span>
+          <span>macOS &amp; Win</span>
+        </div>
+        <div style="margin-top: auto; padding-top: 20px;">
+          <a href="https://trackai.party" target="_blank" rel="noopener" class="btn-glass btn-primary" style="width: 100%; text-align: center; display: block; text-decoration: none;">
+            Descubrir TrackAI 🎧
+          </a>
+        </div>
+      </div>
+
+      <!-- Card 2: PRE-SET by TrackAI -->
+      <div class="innovacion-card glass-panel reveal" style="border-left: 3px solid #FF5F2E;">
+        <div class="innovacion-badge" style="background: rgba(255, 95, 46, 0.15); color: #FF5F2E; border: 1px solid rgba(255, 95, 46, 0.35);">
+          💾 ARQUITECTURA DATALESS 0 KB · MACOS
+        </div>
+        <h3>PRE-SET</h3>
+        <p class="innovacion-sub">Toda tu biblioteca en la nube. Cero gigas duplicados.</p>
+        <p class="innovacion-desc">
+          Resuelve el mayor dolor de los DJs de gira: falta de espacio en disco. Estructura gig crates virtuales a 0 KB usando enlaces APFS en Apple Silicon (M1-M4), sincronización con Google Drive y compatibilidad nativa con Serato DJ.
+        </p>
+        <div class="innovacion-tags">
+          <span>0 KB Dataless</span>
+          <span>Apple Silicon (M1–M4)</span>
+          <span>APFS Engine</span>
+          <span>Cloudflare Edge</span>
+          <span>Fastify API</span>
+        </div>
+        <div style="margin-top: auto; padding-top: 20px;">
+          <a href="https://preset.trackai.party" target="_blank" rel="noopener" class="btn-glass" style="width: 100%; text-align: center; display: block; text-decoration: none; border-color: rgba(255, 95, 46, 0.5); color: #fff;">
+            Explorar PRE-SET ⚡
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cita de Fundador / Founder Statement -->
+    <div class="founder-quote glass-panel reveal" style="margin-top: 50px; padding: 45px 35px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.12); position: relative; overflow: hidden;">
+      <div style="font-size: 2.5rem; line-height: 1; margin-bottom: 12px; color: var(--neon-cyan); opacity: 0.8;">“</div>
+      <p style="font-size: 1.25rem; font-style: italic; color: #fff; max-width: 840px; margin: 0 auto 24px; line-height: 1.65; font-weight: 300;">
+        «En cabina cada segundo cuenta y la pista no perdona vacilaciones. Diseñé <strong>TrackAI</strong> y <strong>PRE-SET</strong> porque conozco de primera mano el estrés y las necesidades del DJ en directo. Unimos inteligencia artificial, arquitecturas de datos de alto rendimiento y oído musical para darle a los DJs superpoderes en vivo.»
+      </p>
+      <div style="font-weight: 700; color: var(--neon-cyan); font-size: 1.15rem; letter-spacing: 1px;">
+        ALEXIS FERRADA (DJ VLEX)
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2.5px; margin-top: 6px;">
+        Founder &amp; Chief Architect de TrackAI &amp; PRE-SET
       </div>
     </div>
   </div>
@@ -655,7 +751,7 @@ section h2 {
 
     <!-- Derecha: Track AI -->
     <div class="ty-footer-right">
-      <a href="https://trackai.tusitioya.cl" target="_blank" class="ty-ad-link">
+      <a href="https://trackai.party" target="_blank" class="ty-ad-link">
         <div class="ty-ad-header">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
           <h4>TRACK AI</h4>
