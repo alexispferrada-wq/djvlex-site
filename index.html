@@ -201,13 +201,14 @@ nav a {
 nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
 
 /* ═══════════════════════════════════════════════════════
-   🌌 NARRATIVA HERO SCROLLYTELLING (5 ETAPAS)
-   Caos → Ritmo → Túnel → Software → DJ Vlex
+   🌌 NARRATIVA HERO SCROLLYTELLING — ESTILO PRE-SET
+   Partículas 3D visibles + Narrativa sincronizada con el fondo
+   Desktop: Texto lateral / Móvil: Tarjeta compacta inferior
    ═══════════════════════════════════════════════════════ */
 .narrative-hero {
   position: relative;
   width: 100%;
-  height: 450vh;
+  height: 480vh; /* Permite scroll cadencioso entre las 5 fases */
 }
 .narrative-sticky {
   position: sticky;
@@ -215,239 +216,366 @@ nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
   left: 0;
   width: 100%;
   height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
   overflow: hidden;
-  padding: 0 20px;
+  pointer-events: none;
 }
-.narrative-stages {
-  position: relative;
-  width: min(92%, 840px);
-  min-height: 520px;
+/* Viñeta sutil lateral en desktop para legibilidad del texto */
+.narrative-sticky::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 25% 65%, rgba(3, 3, 6, 0.72) 0%, rgba(3, 3, 6, 0.2) 55%, transparent 80%);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* HUD SUPERIOR DE TELEMETRÍA Y PROGRESO */
+.narrative-hud {
+  position: absolute;
+  top: 92px;
+  left: clamp(20px, 5vw, 80px);
+  right: clamp(20px, 5vw, 80px);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 50;
+  pointer-events: auto;
+}
+.hud-telemetry {
   display: flex;
   align-items: center;
-  justify-content: center;
+  gap: 12px;
+  background: rgba(10, 12, 18, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 16px;
+  border-radius: 100px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+}
+.hud-status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 10px var(--neon-cyan);
+  animation: pulseDot 2s infinite ease-in-out;
+}
+@keyframes pulseDot {
+  0%, 100% { opacity: 0.6; transform: scale(0.9); }
+  50% { opacity: 1; transform: scale(1.2); }
+}
+.hud-phase-name {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: #fff;
+  text-transform: uppercase;
+}
+.hud-desc-badge {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 1px;
+  color: var(--neon-cyan);
+  border-left: 1px solid rgba(255,255,255,0.2);
+  padding-left: 10px;
+  text-transform: uppercase;
+}
+
+/* Indicador de pasos tipo PRE-SET */
+.hud-steps {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(10, 12, 18, 0.7);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8px 18px;
+  border-radius: 100px;
+}
+.hud-step-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.7rem;
+  letter-spacing: 1px;
+  color: var(--text-muted);
+  transition: color 0.3s;
+}
+.hud-step-item::after {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  transition: all 0.3s;
+}
+.hud-step-item.active {
+  color: #fff;
+  font-weight: 700;
+}
+.hud-step-item.active::after {
+  background: var(--neon-magenta);
+  box-shadow: 0 0 10px var(--neon-magenta);
+  transform: scale(1.4);
+}
+
+/* BOTÓN DE AUDIO FLOTANTE COMPACTO EN EL HUD */
+.hud-audio-btn {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 100px;
+  padding: 8px 18px;
+  color: #fff;
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.15);
+  transition: all 0.25s ease;
+  pointer-events: auto;
+}
+.hud-audio-btn:hover {
+  background: rgba(0, 240, 255, 0.18);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 30px rgba(0, 240, 255, 0.35);
+  transform: translateY(-1px);
+}
+.hud-audio-btn[data-on="true"] {
+  border-color: var(--neon-magenta);
+  background: rgba(255, 0, 127, 0.15);
+  box-shadow: 0 0 25px rgba(255, 0, 127, 0.35);
+}
+
+/* PANELES DE NARRATIVA (PASOS 01 A 04) */
+.narrative-stages {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
 }
 .narrative-card {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -46%) scale(0.94);
-  width: 100%;
-  text-align: center;
+  left: clamp(24px, 6vw, 90px);
+  bottom: clamp(40px, 10vh, 120px);
+  width: min(480px, calc(100vw - 48px));
+  background: rgba(9, 10, 16, 0.75);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 24px;
+  padding: 30px 32px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   opacity: 0;
   visibility: hidden;
-  pointer-events: none;
+  transform: translateY(24px) scale(0.97);
   transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
               transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
               visibility 0.45s;
+  pointer-events: none;
+  z-index: 40;
 }
 .narrative-card.active {
   opacity: 1;
   visibility: visible;
-  transform: translate(-50%, -50%) scale(1);
+  transform: translateY(0) scale(1);
   pointer-events: auto;
 }
 .narrative-badge {
-  display: inline-block;
-  font-family: 'Space Grotesk', monospace;
-  font-size: 0.85rem;
-  letter-spacing: 2.5px;
-  color: var(--neon-cyan);
-  background: rgba(0, 240, 255, 0.08);
-  border: 1px solid rgba(0, 240, 255, 0.3);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border-radius: 100px;
-  padding: 8px 22px;
-  margin-bottom: 24px;
-  text-transform: uppercase;
-  box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
-}
-.narrative-title {
-  font-size: clamp(2.2rem, 5.8vw, 4.2rem);
-  font-weight: 900;
-  line-height: 1.08;
-  letter-spacing: -1.5px;
-  margin-bottom: 20px;
-  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, var(--neon-cyan) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 4px 25px rgba(0,0,0,0.9));
-}
-.narrative-desc {
-  font-size: clamp(1.1rem, 2vw, 1.38rem);
-  color: #d1d5db;
-  line-height: 1.65;
-  max-width: 660px;
-  margin: 0 auto 28px;
-  text-shadow: 0 2px 12px rgba(0,0,0,0.9);
-  font-weight: 300;
-}
-.narrative-scroll-indicator {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  font-size: 0.86rem;
+  gap: 8px;
   font-family: 'Space Grotesk', monospace;
-  color: var(--text-muted);
-  letter-spacing: 1.5px;
+  font-size: 0.76rem;
+  letter-spacing: 2px;
+  color: var(--neon-cyan);
   text-transform: uppercase;
-  animation: bounceDown 2s infinite ease-in-out;
+  margin-bottom: 12px;
 }
-@keyframes bounceDown {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
+.narrative-badge span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 8px var(--neon-cyan);
 }
-
-/* HUD Timeline de la Narrativa */
-.narrative-hud {
-  position: absolute;
-  top: 96px;
-  left: 50%;
-  transform: translateX(-50%);
+.narrative-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.5px;
+  margin-bottom: 14px;
+  color: #fff;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.8);
+}
+.narrative-title em {
+  font-style: normal;
+  color: var(--neon-magenta);
+  text-shadow: 0 0 20px rgba(255, 0, 127, 0.4);
+}
+.narrative-desc {
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  color: #cbd5e1;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  font-weight: 300;
+}
+.narrative-action-hint {
   display: flex;
-  flex-direction: column;
   align-items: center;
   gap: 8px;
-  z-index: 50;
-  pointer-events: none;
-}
-.hud-phase-name {
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.78rem;
-  letter-spacing: 2px;
-  color: var(--neon-cyan);
-  text-transform: uppercase;
-  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
-}
-.hud-timeline {
-  display: flex;
-  gap: 16px;
-  background: rgba(15, 15, 20, 0.75);
-  backdrop-filter: blur(25px);
-  -webkit-backdrop-filter: blur(25px);
-  padding: 6px 18px;
-  border-radius: 100px;
-  border: 1px solid rgba(255,255,255,0.12);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-}
-.hud-dot {
-  font-family: 'Space Grotesk', monospace;
-  font-size: 0.68rem;
+  font-size: 0.74rem;
+  letter-spacing: 1.5px;
   color: var(--text-muted);
-  letter-spacing: 1px;
-  transition: color 0.3s, text-shadow 0.3s;
+  text-transform: uppercase;
 }
-.hud-dot.active {
-  color: #fff;
-  text-shadow: 0 0 10px var(--neon-cyan);
-  font-weight: 700;
-}
-.hud-progress-bar {
-  width: 140px;
-  height: 2px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.hud-progress-fill {
-  width: 0%;
-  height: 100%;
-  background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan));
-  box-shadow: 0 0 8px var(--neon-cyan);
-  transition: width 0.08s linear;
+.narrative-action-hint svg {
+  animation: bounceDown 1.8s infinite ease-in-out;
 }
 
-.narrative-audio-cta {
-  position: absolute;
-  bottom: 28px;
+/* PASO 05: TARJETA FINAL DE DJ VLEX (HERO COMPLETO) */
+.narrative-card#stage4 {
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 50;
-  margin-bottom: 0;
-  pointer-events: auto;
+  bottom: auto;
+  top: 50%;
+  transform: translate(-50%, -46%) scale(0.95);
+  width: min(780px, calc(100vw - 36px));
+  text-align: center;
+  padding: clamp(32px, 5vh, 48px) clamp(24px, 4vw, 44px);
+  background: rgba(10, 11, 18, 0.82);
 }
-
-/* Stage 5 / Síntesis Final DJ Vlex */
+.narrative-card#stage4.active {
+  transform: translate(-50%, -50%) scale(1);
+}
 .hero-tagline {
   display: inline-block;
-  padding: 8px 20px;
+  padding: 6px 18px;
   border-radius: 100px;
-  background: rgba(255,255,255,0.05);
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.12);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.9rem;
+  font-size: 0.82rem;
   color: var(--neon-cyan);
-  margin-bottom: 22px;
+  margin-bottom: 18px;
   letter-spacing: 2px;
   text-transform: uppercase;
-  box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
 }
 .hero-logo-wrap {
   transform-style: preserve-3d;
   will-change: transform;
 }
 .hero-logo {
-  width: min(85%, 580px);
+  width: min(85%, 520px);
   height: auto;
   margin: 0 auto;
   display: block;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 45px rgba(255, 0, 127, 0.45));
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.85)) drop-shadow(0 0 40px rgba(255, 0, 127, 0.4));
   animation: heroFloat 6s ease-in-out infinite;
 }
-@keyframes heroFloat {
-  0%, 100% { transform: translateY(0) rotateX(0deg); }
-  50% { transform: translateY(-14px) rotateX(2.5deg); }
-}
 .hero-summary {
-  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  font-size: clamp(0.95rem, 1.5vw, 1.18rem);
   color: #d1d5db;
-  line-height: 1.65;
-  max-width: 700px;
-  margin: 18px auto 28px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+  line-height: 1.6;
+  max-width: 620px;
+  margin: 16px auto 22px;
   font-weight: 300;
 }
 .hero-cta-group {
   display: flex;
-  gap: 18px;
+  gap: 16px;
   justify-content: center;
   flex-wrap: wrap;
-  margin-bottom: 24px;
-}
-.scroll-hint {
-  color: var(--text-muted);
-  font-size: 0.78rem;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  animation: hintPulse 2.5s ease-in-out infinite;
-}
-@keyframes hintPulse {
-  0%, 100% { opacity: 0.4; transform: translateY(0); }
-  50% { opacity: 1; transform: translateY(6px); }
+  margin-bottom: 20px;
 }
 
-@media (max-width: 680px) {
-  .narrative-hud { top: 76px; }
-  .hud-timeline .hud-dot span { display: none; }
-  .hud-timeline .hud-dot::after { content: "•"; font-size: 1.2rem; }
-  .hud-timeline { gap: 10px; padding: 4px 12px; }
-  .narrative-stages { min-height: 440px; }
-  .hero-cta-group { flex-direction: column; width: 100%; max-width: 320px; margin: 0 auto 20px; }
-  .narrative-audio-cta { bottom: 18px; }
+/* Barra de progreso inferior tipo PRE-SET */
+.hud-progress-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  z-index: 50;
 }
+.hud-progress-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan));
+  box-shadow: 0 0 10px var(--neon-cyan);
+  transition: width 0.08s linear;
+}
+
+/* ═══════════════════════════════════════════════════════
+   ADAPTACIÓN PARA MÓVILES (PANTALLA LIMPIA PARA EL 3D)
+   ═══════════════════════════════════════════════════════ */
+@media (max-width: 860px) {
+  .narrative-sticky::before {
+    background: linear-gradient(180deg, transparent 40%, rgba(3, 3, 6, 0.85) 75%, rgba(3, 3, 6, 0.98) 100%);
+  }
+  .narrative-hud {
+    top: 76px;
+    left: 14px;
+    right: 14px;
+    justify-content: space-between;
+  }
+  .hud-steps { display: none; }
+  .hud-desc-badge { display: none; }
+  .hud-telemetry { padding: 6px 12px; }
+  .hud-phase-name { font-size: 0.72rem; }
+  .hud-audio-btn { padding: 6px 12px; font-size: 0.72rem; }
+  
+  /* Tarjetas de narrativa en móvil: abajo y compactas */
+  .narrative-card {
+    left: 14px;
+    right: 14px;
+    bottom: 20px;
+    width: auto;
+    padding: 18px 20px;
+    border-radius: 20px;
+  }
+  .narrative-title {
+    font-size: 1.35rem;
+    margin-bottom: 8px;
+  }
+  .narrative-desc {
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+  }
+  
+  /* Tarjeta final en móvil */
+  .narrative-card#stage4 {
+    top: auto;
+    bottom: 20px;
+    transform: none;
+    padding: 24px 20px;
+    max-height: 82vh;
+    overflow-y: auto;
+  }
+  .narrative-card#stage4.active {
+    transform: none;
+  }
+  .hero-logo { width: 75%; }
+  .hero-cta-group { flex-direction: column; width: 100%; gap: 10px; }
+  .hero-cta-group .btn-glass { width: 100%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .narrative-hero { height: auto; }
-  .narrative-sticky { position: relative; height: auto; padding: 140px 20px 60px; }
-  .narrative-hud { display: none; }
-  .narrative-card { position: relative; top: auto; left: auto; transform: none; opacity: 1; visibility: visible; display: none; }
-  .narrative-card#stage4 { display: block; }
-  .hero-logo, .scroll-hint, .narrative-scroll-indicator { animation: none; }
+  .narrative-sticky { position: relative; height: auto; padding: 120px 20px 60px; }
+  .narrative-hud, .hud-progress-line { display: none; }
+  .narrative-card { display: none; }
+  .narrative-card#stage4 { display: block; position: static; transform: none; margin: 0 auto; }
+  .hero-logo, .scroll-hint { animation: none; }
 }
 
 /* STATS */
@@ -580,76 +708,76 @@ section h2 {
 <section class="narrative-hero" id="narrativeHero">
   <div class="narrative-sticky">
     
-    <!-- HUD DE PROGRESO DE LA NARRATIVA -->
+    <!-- HUD DE TELEMETRÍA Y CONTROL DE AUDIO (ESTILO PRE-SET) -->
     <div class="narrative-hud" id="narrativeHud" aria-hidden="true">
-      <div class="hud-phase-name" id="hudPhaseName">01 // CAOS</div>
-      <div class="hud-timeline">
-        <div class="hud-dot active" data-phase="0"><span>CAOS</span></div>
-        <div class="hud-dot" data-phase="1"><span>RITMO</span></div>
-        <div class="hud-dot" data-phase="2"><span>TÚNEL</span></div>
-        <div class="hud-dot" data-phase="3"><span>SOFTWARE</span></div>
-        <div class="hud-dot" data-phase="4"><span>DJ VLEX</span></div>
+      <div class="hud-telemetry">
+        <span class="hud-status-dot"></span>
+        <span class="hud-phase-name" id="hudPhaseName">01 // CAOS</span>
+        <span class="hud-desc-badge" id="hudTelemetry">22.000 TRACKS EN LA NUBE</span>
       </div>
-      <div class="hud-progress-bar"><div class="hud-progress-fill" id="hudProgressFill"></div></div>
-    </div>
 
-    <!-- AUDIO CTA FLOTANTE -->
-    <div class="audio-cta narrative-audio-cta">
-      <button class="audio-btn" id="audioBtn" data-on="false" aria-pressed="false">
+      <div class="hud-steps">
+        <div class="hud-step-item active" data-step="0">01 CAOS</div>
+        <div class="hud-step-item" data-step="1">02 RITMO</div>
+        <div class="hud-step-item" data-step="2">03 TÚNEL</div>
+        <div class="hud-step-item" data-step="3">04 SOFTWARE</div>
+        <div class="hud-step-item" data-step="4">05 DJ VLEX</div>
+      </div>
+
+      <button class="hud-audio-btn" id="audioBtn" data-on="false" aria-pressed="false" title="Activar Dembow reactivo">
         <span class="audio-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
-        <span id="audioBtnLabel">Activar Experiencia Sonora</span>
+        <span id="audioBtnLabel">Activar Dembow</span>
       </button>
-      <span class="audio-note" id="audioNote">Dembow 110 BPM reactivo en vivo 🔊</span>
     </div>
 
-    <!-- PANELES DE CADA ETAPA -->
+    <!-- PANELES NARRATIVOS (CADA PASO EXPLICA LO QUE HACE EL FONDO 3D) -->
     <div class="narrative-stages">
       
-      <!-- ETAPA 1: CAOS / RUIDO -->
+      <!-- PASO 1: CAOS / MATERIA PRIMA -->
       <div class="narrative-card active" id="stage0">
-        <div class="narrative-badge">01 // RUIDO &amp; CAOS</div>
-        <h2 class="narrative-title">DESORDEN. ENERGÍA PURA.</h2>
-        <p class="narrative-desc">Miles de tracks dispersos en la noche. Frecuencias sin pulso esperando dirección. De la energía cruda nace la materia prima del DJ.</p>
-        <div class="narrative-scroll-indicator">
-          <span>Desliza para ordenar la frecuencia</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        <div class="narrative-badge"><span></span> 01 // MATERIA PRIMA</div>
+        <h2 class="narrative-title">La biblioteca en el <em>caos</em>.</h2>
+        <p class="narrative-desc">Miras el fondo: cada punto es un track flotando sin rumbo en la oscuridad de la noche. Es la energía dispersa antes de que el DJ toque la primera perilla.</p>
+        <div class="narrative-action-hint">
+          <span>Desliza para ordenar la materia</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
         </div>
       </div>
 
-      <!-- ETAPA 2: RITMO / DEMBOW -->
+      <!-- PASO 2: RITMO / VINILO CONCÉNTRICO -->
       <div class="narrative-card" id="stage1">
-        <div class="narrative-badge">02 // EL PULSO DEL DEMBOW</div>
-        <h2 class="narrative-title">EL BEAT TOMA CONTROL.</h2>
-        <p class="narrative-desc">Las partículas colapsan en órbitas concéntricas. El vinilo gira a 110 BPM. El sub-grave marca el pulso y la pista responde.</p>
-        <div class="narrative-scroll-indicator">
-          <span>Continúa hacia la cabina</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        <div class="narrative-badge"><span></span> 02 // ORDEN ANÁLOGO</div>
+        <h2 class="narrative-title">La nube colapsa en un <em>vinilo</em>.</h2>
+        <p class="narrative-desc">El bajo entra a 110 BPM. Mira el fondo: las 22.000 partículas se atraen magnéticamente y forman los surcos concéntricos de un disco girando en la cabina. El ritmo toma el control.</p>
+        <div class="narrative-action-hint">
+          <span>Continúa hacia la pista</span>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
         </div>
       </div>
 
-      <!-- ETAPA 3: EL TÚNEL / SET EN VIVO -->
+      <!-- PASO 3: EL TÚNEL / INMERSIÓN EN CABINA -->
       <div class="narrative-card" id="stage2">
-        <div class="narrative-badge">03 // ADENTRO DEL SET</div>
-        <h2 class="narrative-title">INMERSIÓN EN CABINA.</h2>
-        <p class="narrative-desc">Aceleración warp directa a la pista. Noches electrizantes y residencias oficiales en Trinity Restobar y La Virgen.</p>
-        <div class="narrative-scroll-indicator">
+        <div class="narrative-badge"><span></span> 03 // VELOCIDAD WARP</div>
+        <h2 class="narrative-title">El disco se estira: <em>adentro del set</em>.</h2>
+        <p class="narrative-desc">Los surcos colapsan hacia la cámara y forman un túnel de aceleración. Estás adentro de la pista: la energía en vivo de Trinity Restobar y La Virgen.</p>
+        <div class="narrative-action-hint">
           <span>Hacia la arquitectura digital</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
         </div>
       </div>
 
-      <!-- ETAPA 4: SOFTWARE & IA -->
+      <!-- PASO 4: SOFTWARE / MATRIZ ALGORÍTMICA -->
       <div class="narrative-card" id="stage3">
-        <div class="narrative-badge">04 // SOFTWARE ARCHITECTURE</div>
-        <h2 class="narrative-title">CÓDIGO &amp; INTELIGENCIA.</h2>
-        <p class="narrative-desc">La nube se estructura en una matriz algorítmica. Founder de TrackAI y PRE-SET. Software de vanguardia creado por un DJ, para DJs.</p>
-        <div class="narrative-scroll-indicator">
+        <div class="narrative-badge"><span></span> 04 // SOFTWARE ARCHITECTURE</div>
+        <h2 class="narrative-title">La música convertida en <em>código</em>.</h2>
+        <p class="narrative-desc">El túnel se congela y los puntos forman una matriz digital de datos. Es la ingeniería detrás del DJ: inteligencia artificial en TrackAI y crates virtuales a 0 KB en PRE-SET.</p>
+        <div class="narrative-action-hint">
           <span>Convergencia final</span>
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
         </div>
       </div>
 
-      <!-- ETAPA 5: DJ VLEX SÍNTESIS -->
+      <!-- PASO 5: CONVERGENCIA TOTAL / DJ VLEX HERO -->
       <div class="narrative-card" id="stage4">
         <div class="hero-tagline">🔥 Urban Vibes • Noches Inmersivas</div>
         <div class="hero-logo-wrap" id="heroLogo">
@@ -660,10 +788,13 @@ section h2 {
           <button class="btn-glass btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contactar Ahora</button>
           <a href="https://www.tiktok.com/@dj__vlex" target="_blank" rel="noopener" class="btn-glass">Ver en TikTok Live</a>
         </div>
-        <div class="scroll-hint">▼ Explora residencias y proyectos</div>
+        <div class="scroll-hint">▼ Desliza para explorar residencias y proyectos</div>
       </div>
 
     </div>
+
+    <!-- LÍNEA DE PROGRESO INFERIOR TIPO PRE-SET -->
+    <div class="hud-progress-line"><div class="hud-progress-fill" id="hudProgressFill"></div></div>
   </div>
 </section>
 
@@ -1297,9 +1428,7 @@ var DJ_AUDIO = {
 
 /* ═══════════════════════════════════════════════════════
    🌌 ESCENA 3D MORFOLÓGICA CON SHADERS — Three.js
-   5 Formas Guiadas por Scroll y Audio Reactivo:
-   Caos → Ritmo (Vinilo) → Túnel Warp → Software Matrix → DJ Vlex Core
-   Inspirado en PRE-SET (preset.trackai.party)
+   Optimizada para Móvil y Desktop (Inspirada en PRE-SET)
    ═══════════════════════════════════════════════════════ */
 (function () {
   var canvas = document.getElementById('scene3d');
@@ -1308,7 +1437,7 @@ var DJ_AUDIO = {
 
   var renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: false, alpha: false, powerPreference: 'high-performance' });
   } catch (e) { return; }
 
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -1318,14 +1447,15 @@ var DJ_AUDIO = {
   var scene = new THREE.Scene();
   scene.background = new THREE.Color(0x030306);
 
-  var camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 300);
-  camera.position.set(0, 0, 22);
+  /* Cámara con campo visual adaptado */
+  var camera = new THREE.PerspectiveCamera(54, window.innerWidth / window.innerHeight, 0.1, 350);
 
   /* Elementos del HUD y Scrollytelling */
   var heroEl = document.getElementById('narrativeHero');
   var hudPhaseName = document.getElementById('hudPhaseName');
+  var hudTelemetry = document.getElementById('hudTelemetry');
   var hudFill = document.getElementById('hudProgressFill');
-  var hudDots = document.querySelectorAll('.hud-dot');
+  var hudStepItems = document.querySelectorAll('.hud-step-item');
   var stageCards = [
     document.getElementById('stage0'),
     document.getElementById('stage1'),
@@ -1333,6 +1463,7 @@ var DJ_AUDIO = {
     document.getElementById('stage3'),
     document.getElementById('stage4')
   ];
+
   var phaseLabels = [
     '01 // CAOS',
     '02 // RITMO',
@@ -1341,7 +1472,15 @@ var DJ_AUDIO = {
     '05 // DJ VLEX'
   ];
 
-  /* ── CONSTRUCCIÓN DE LAS 5 FORMAS (22,000 Partículas en GPU) ── */
+  var telemetryLabels = [
+    '22.000 TRACKS EN LA NUBE',
+    'SURCOS DE VINILO · 110 BPM',
+    'TÚNEL WARP · EN VIVO',
+    'MATRIZ DE DATOS · TRACKAI',
+    'DJ VLEX · ARTISTA & ARCHITECT'
+  ];
+
+  /* ── CONSTRUCCIÓN DE LAS 5 FORMAS (22.000 Partículas en GPU) ── */
   var COUNT = window.innerWidth < 768 ? 14000 : 22000;
   var posChaos  = new Float32Array(COUNT * 3);
   var posRhythm = new Float32Array(COUNT * 3);
@@ -1358,25 +1497,25 @@ var DJ_AUDIO = {
     seeds[i] = seed;
 
     /* 1. Forma 0: Caos / Nebulosa galáctica dispersa */
-    var r0 = Math.pow(Math.random(), 0.55) * 22.0 + 0.5;
+    var r0 = Math.pow(Math.random(), 0.55) * 20.0 + 0.5;
     var arm = (i % 3) * (Math.PI * 2 / 3);
     var ang0 = arm + r0 * 0.42 + (Math.random() - 0.5) * 1.1;
-    posChaos[i * 3]     = Math.cos(ang0) * r0 + (Math.random() - 0.5) * 1.8;
-    posChaos[i * 3 + 1] = (Math.random() - 0.5) * (8.0 * (1.0 - r0 / 25.0));
-    posChaos[i * 3 + 2] = Math.sin(ang0) * r0 + (Math.random() - 0.5) * 1.8;
+    posChaos[i * 3]     = Math.cos(ang0) * r0 + (Math.random() - 0.5) * 1.6;
+    posChaos[i * 3 + 1] = (Math.random() - 0.5) * (7.5 * (1.0 - r0 / 22.0));
+    posChaos[i * 3 + 2] = Math.sin(ang0) * r0 + (Math.random() - 0.5) * 1.6;
 
     /* 2. Forma 1: Ritmo / Surcos concéntricos de Vinilo DJ */
-    var groove = Math.floor(Math.pow(Math.random(), 0.65) * 20);
-    var ringR = 2.0 + groove * 0.65;
+    var groove = Math.floor(Math.pow(Math.random(), 0.65) * 22);
+    var ringR = 1.8 + groove * 0.62;
     var ang1 = Math.random() * Math.PI * 2;
-    var dr1 = (Math.random() - 0.5) * 0.12;
+    var dr1 = (Math.random() - 0.5) * 0.10;
     posRhythm[i * 3]     = Math.cos(ang1) * (ringR + dr1);
-    posRhythm[i * 3 + 1] = (Math.random() - 0.5) * 0.15;
+    posRhythm[i * 3 + 1] = (Math.random() - 0.5) * 0.12;
     posRhythm[i * 3 + 2] = Math.sin(ang1) * (ringR + dr1);
 
     /* 3. Forma 2: Túnel Warp Cilíndrico */
-    var ang2 = (i * 0.12) + (Math.random() - 0.5) * 0.4;
-    var tunR = 4.2 + Math.random() * 2.8;
+    var ang2 = (i * 0.12) + (Math.random() - 0.5) * 0.35;
+    var tunR = 3.8 + Math.random() * 2.5;
     posTunnel[i * 3]     = Math.cos(ang2) * tunR;
     posTunnel[i * 3 + 1] = Math.sin(ang2) * tunR;
     posTunnel[i * 3 + 2] = (Math.random() * 80.0) - 40.0;
@@ -1385,21 +1524,21 @@ var DJ_AUDIO = {
     var c = i % cols;
     var row = Math.floor(i / cols) % rows;
     var lyr = Math.floor(i / (cols * rows));
-    posMatrix[i * 3]     = (c / (cols - 1) - 0.5) * 15.0;
-    posMatrix[i * 3 + 1] = (0.5 - row / (rows - 1)) * 9.5;
-    posMatrix[i * 3 + 2] = (lyr - layers * 0.5) * 2.8 + (Math.random() - 0.5) * 0.15;
+    posMatrix[i * 3]     = (c / (cols - 1) - 0.5) * 13.5;
+    posMatrix[i * 3 + 1] = (0.5 - row / (rows - 1)) * 8.5;
+    posMatrix[i * 3 + 2] = (lyr - layers * 0.5) * 2.6 + (Math.random() - 0.5) * 0.12;
 
     /* 5. Forma 4: Convergencia DJ Vlex / Corona y Halo Radiante */
     if (i % 3 === 0) {
       var hAng = Math.random() * Math.PI * 2;
-      var hR = 5.2 + (Math.random() - 0.5) * 0.9;
+      var hR = 5.0 + (Math.random() - 0.5) * 0.8;
       posCore[i * 3]     = Math.cos(hAng) * hR;
       posCore[i * 3 + 1] = Math.sin(hAng) * hR;
-      posCore[i * 3 + 2] = (Math.random() - 0.5) * 1.2;
+      posCore[i * 3 + 2] = (Math.random() - 0.5) * 1.0;
     } else {
       var phi = Math.acos(2.0 * Math.random() - 1.0);
       var theta = Math.random() * Math.PI * 2;
-      var sRad = 2.6 + Math.pow(Math.random(), 2.0) * 8.5;
+      var sRad = 2.4 + Math.pow(Math.random(), 2.0) * 8.0;
       posCore[i * 3]     = sRad * Math.sin(phi) * Math.cos(theta);
       posCore[i * 3 + 1] = sRad * Math.sin(phi) * Math.sin(theta);
       posCore[i * 3 + 2] = sRad * Math.cos(phi);
@@ -1414,7 +1553,7 @@ var DJ_AUDIO = {
   geometry.setAttribute('aCore',    new THREE.BufferAttribute(posCore, 3));
   geometry.setAttribute('aSeed',    new THREE.BufferAttribute(seeds, 1));
 
-  /* GLSL SHADER MATERIAL (100% GPU) */
+  /* GLSL SHADER MATERIAL */
   var vertexShader = [
     'uniform float uP;',
     'uniform float uT;',
@@ -1445,10 +1584,10 @@ var DJ_AUDIO = {
     '}',
 
     'void main() {',
-    '  float s0 = ease(clamp((uP - 0.12) / 0.16, 0.0, 1.0));', // Caos -> Ritmo
-    '  float s1 = ease(clamp((uP - 0.35) / 0.16, 0.0, 1.0));', // Ritmo -> Túnel
-    '  float s2 = ease(clamp((uP - 0.58) / 0.16, 0.0, 1.0));', // Túnel -> Software
-    '  float s3 = ease(clamp((uP - 0.80) / 0.14, 0.0, 1.0));', // Software -> Core
+    '  float s0 = ease(clamp((uP - 0.12) / 0.16, 0.0, 1.0));',
+    '  float s1 = ease(clamp((uP - 0.35) / 0.16, 0.0, 1.0));',
+    '  float s2 = ease(clamp((uP - 0.58) / 0.16, 0.0, 1.0));',
+    '  float s3 = ease(clamp((uP - 0.80) / 0.14, 0.0, 1.0));',
 
     '  vec3 p0 = position;',
     '  vec3 p1 = aRhythm;',
@@ -1456,24 +1595,24 @@ var DJ_AUDIO = {
     '  vec3 p3 = aMatrix;',
     '  vec3 p4 = aCore;',
 
-    '  /* Dinámicas Caos */',
+    '  /* Caos */',
     '  float a0 = uT * 0.12 + aSeed * 6.28;',
     '  p0 += vec3(sin(a0 + p0.y * 0.25), cos(a0 * 1.3 + p0.x * 0.2), sin(a0 * 0.8 + p0.z * 0.25)) * (0.35 + uBass * 0.9);',
 
-    '  /* Giro de vinilo en Ritmo */',
+    '  /* Vinilo */',
     '  float spin = uT * (0.8 + uBass * 0.5);',
     '  float cS = cos(spin); float sS = sin(spin);',
     '  p1.xz = mat2(cS, -sS, sS, cS) * p1.xz;',
     '  p1.y += sin(uT * 3.5 + aSeed * 12.0) * (0.06 + uKick * 0.28);',
 
-    '  /* Vuelo del túnel */',
+    '  /* Túnel */',
     '  float spd = uT * (4.5 + uBass * 14.0);',
     '  p2.z = mod(p2.z + spd, 70.0) - 45.0;',
     '  float tRot = p2.z * 0.06 + uT * 0.4;',
     '  float cT = cos(tRot); float sT = sin(tRot);',
     '  p2.xy = mat2(cT, -sT, sT, cT) * p2.xy;',
 
-    '  /* Pulso matricial en Software */',
+    '  /* Matriz */',
     '  if (s2 > 0.01 && s3 < 0.99) {',
     '    p3.y += sin(uT * 4.0 + p3.x * 2.0) * (0.06 + uMid * 0.22);',
     '    if (mod(aSeed * 80.0, 5.0) < 1.0) {',
@@ -1481,11 +1620,10 @@ var DJ_AUDIO = {
     '    }',
     '  }',
 
-    '  /* Pulso y respiración en el Core DJ Vlex */',
+    '  /* Core */',
     '  float corePulse = sin(uT * 2.2 + aSeed * 6.0) * 0.12 + uKick * 0.55;',
     '  p4 += normalize(p4 + 0.0001) * corePulse;',
 
-    '  /* Interpolación Morfológica Continua */',
     '  vec3 p = mix(p0, p1, s0);',
     '  p = mix(p, p2, s1);',
     '  p = mix(p, p3, s2);',
@@ -1496,12 +1634,10 @@ var DJ_AUDIO = {
     '  vec4 mv = modelViewMatrix * vec4(p, 1.0);',
     '  gl_Position = projectionMatrix * mv;',
 
-    '  /* Tamaño reactivo con atenuación por distancia */',
-    '  float baseSz = mix(2.2, 3.4, aSeed);',
+    '  float baseSz = mix(2.4, 3.6, aSeed);',
     '  float kickSz = 1.0 + uKick * 0.65 + uHigh * 0.35;',
-    '  gl_PointSize = min(baseSz * kickSz * uPx * (68.0 / max(1.0, -mv.z)), 18.0 * uPx);',
+    '  gl_PointSize = min(baseSz * kickSz * uPx * (64.0 / max(1.0, -mv.z)), 16.0 * uPx);',
 
-    '  /* Paletas dinámicas por etapa */',
     '  vec3 col0 = mix(C_PURPLE, C_PINK, aSeed);',
     '  vec3 col1 = mix(C_PINK, C_CYAN, sin(aSeed * 6.28 + uT) * 0.5 + 0.5);',
     '  vec3 col2 = mix(C_CYAN, C_PINK, clamp((p.z + 45.0) / 60.0, 0.0, 1.0));',
@@ -1551,24 +1687,11 @@ var DJ_AUDIO = {
     depthWrite: false
   });
 
+  /* Grupo de escena para desplazarla en desktop (estilo PRE-SET) */
+  var sceneGroup = new THREE.Group();
   var particleSystem = new THREE.Points(geometry, material);
-  scene.add(particleSystem);
-
-  /* Grilla de soporte que emerge durante el túnel y software */
-  var gridFloor = new THREE.GridHelper(300, 60, 0x00f0ff, 0x2a0a3a);
-  gridFloor.position.y = -10;
-  gridFloor.material.transparent = true;
-  gridFloor.material.opacity = 0.0;
-  gridFloor.material.blending = THREE.AdditiveBlending;
-  gridFloor.material.depthWrite = false;
-  scene.add(gridFloor);
-
-  /* ── Interacción: mouse parallax y scroll progress ── */
-  var mx = 0, my = 0, tmx = 0, tmy = 0;
-  window.addEventListener('mousemove', function (e) {
-    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
-    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
-  });
+  sceneGroup.add(particleSystem);
+  scene.add(sceneGroup);
 
   var targetProgress = 0;
   var currentProgress = 0;
@@ -1584,12 +1707,21 @@ var DJ_AUDIO = {
   window.addEventListener('scroll', updateScroll, { passive: true });
   updateScroll();
 
-  window.addEventListener('resize', function () {
-    camera.aspect = window.innerWidth / window.innerHeight;
+  function onResize() {
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    camera.aspect = w / h;
     camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(w, h);
     material.uniforms.uPx.value = Math.min(window.devicePixelRatio || 1, 2);
     updateScroll();
+  }
+  window.addEventListener('resize', onResize);
+
+  var mx = 0, my = 0, tmx = 0, tmy = 0;
+  window.addEventListener('mousemove', function (e) {
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   });
 
   var clock = new THREE.Clock();
@@ -1597,7 +1729,6 @@ var DJ_AUDIO = {
   function render() {
     var t = clock.getElapsedTime();
 
-    /* Muestrear motor de audio reactivo si está activo */
     if (window.DJ_AUDIO && window.DJ_AUDIO.sample) {
       window.DJ_AUDIO.sample(t);
     }
@@ -1607,10 +1738,8 @@ var DJ_AUDIO = {
     var HIGH = hasAudio ? window.DJ_AUDIO.high : 0.05;
     var KICK = hasAudio ? window.DJ_AUDIO.kick : (Math.max(0, Math.sin(t * 2.8)) * 0.12);
 
-    /* Suavizado continuo de scroll (lerp para 60fps) */
     currentProgress += (targetProgress - currentProgress) * 0.12;
 
-    /* Actualizar uniforms */
     material.uniforms.uP.value = currentProgress;
     material.uniforms.uT.value = t;
     material.uniforms.uBass.value = BASS;
@@ -1618,24 +1747,28 @@ var DJ_AUDIO = {
     material.uniforms.uHigh.value = HIGH;
     material.uniforms.uKick.value = KICK;
 
-    /* Suavizar mouse parallax */
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
 
-    /* Trayectoria de cámara adaptada a la narrativa */
-    var camZ = 22.0 - currentProgress * 6.0;
-    var camY = Math.sin(currentProgress * Math.PI) * 2.5;
+    var aspect = window.innerWidth / window.innerHeight;
+    var isMobile = aspect < 1.1;
+
+    /* En desktop desplazamos el centro a la derecha (x=2.5) para que no tape el texto.
+       En la etapa final (stage4) vuelve al centro para abrazar el logo */
+    var targetGroupX = isMobile ? 0 : (currentProgress > 0.82 ? 0 : 2.5);
+    sceneGroup.position.x += (targetGroupX - sceneGroup.position.x) * 0.08;
+
+    /* En móvil alejamos la cámara (z=32) para que las 3D no se corten en vertical */
+    var baseCamZ = isMobile ? 32.0 : 22.0;
+    var camZ = baseCamZ - currentProgress * (isMobile ? 8.0 : 6.0);
+    var camY = Math.sin(currentProgress * Math.PI) * (isMobile ? 3.5 : 2.2);
+
     camera.position.z = camZ;
-    camera.position.x = mx * 2.5;
-    camera.position.y = camY - my * 2.0;
+    camera.position.x = mx * 2.0;
+    camera.position.y = camY - my * 1.8;
     camera.lookAt(0, 0, 0);
 
-    /* Grilla de soporte neón: emerge con el túnel y software */
-    var gridOp = Math.sin(Math.max(0, Math.min(1, (currentProgress - 0.25) / 0.55)) * Math.PI) * 0.24;
-    gridFloor.material.opacity = gridOp * (1.0 + BASS * 0.8);
-    gridFloor.position.z = -currentProgress * 40.0;
-
-    /* Sincronización de HUD y Paneles */
+    /* Sincronización de HUD, Telemetría y Paneles */
     var activeStage = 0;
     if (currentProgress < 0.18) activeStage = 0;
     else if (currentProgress < 0.38) activeStage = 1;
@@ -1651,10 +1784,12 @@ var DJ_AUDIO = {
     }
 
     if (hudPhaseName) hudPhaseName.textContent = phaseLabels[activeStage];
+    if (hudTelemetry) hudTelemetry.textContent = telemetryLabels[activeStage];
     if (hudFill) hudFill.style.width = (currentProgress * 100).toFixed(1) + '%';
-    hudDots.forEach(function(dot, idx) {
-      if (idx === activeStage) dot.classList.add('active');
-      else dot.classList.remove('active');
+    
+    hudStepItems.forEach(function(item, idx) {
+      if (idx === activeStage) item.classList.add('active');
+      else item.classList.remove('active');
     });
 
     renderer.render(scene, camera);
