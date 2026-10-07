@@ -132,6 +132,49 @@ section { perspective: 1400px; }
   box-shadow: 0 15px 30px rgba(0,0,0,0.6), inset 0 2px 0 rgba(255,255,255,0.4), 0 0 40px rgba(255, 0, 127, 0.6);
 }
 
+/* AUDIO REACTIVO */
+.audio-cta { display: flex; flex-direction: column; align-items: center; gap: 12px; margin-bottom: 32px; }
+.audio-btn {
+  display: inline-flex; align-items: center; gap: 14px;
+  padding: 14px 30px; border-radius: 100px;
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.35);
+  color: #fff; font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700; font-size: 0.95rem; letter-spacing: 2px; text-transform: uppercase;
+  cursor: pointer;
+  transition: background 180ms ease, border-color 180ms ease, transform 160ms ease-out, box-shadow 180ms ease;
+}
+.audio-btn:hover { background: rgba(0,240,255,0.14); border-color: var(--neon-cyan); color: #fff; box-shadow: 0 0 30px rgba(0,240,255,0.35); }
+.audio-btn:active { transform: scale(0.97); }
+.audio-btn:disabled { opacity: 0.55; cursor: not-allowed; }
+/* Ecualizador: activo rebota con el audio, inactivo tiene un pulso tenue */
+.audio-eq { display: flex; align-items: flex-end; gap: 3px; height: 16px; }
+.audio-eq i { width: 3px; height: 4px; background: var(--neon-cyan); border-radius: 1px; box-shadow: 0 0 6px rgba(0,240,255,0.7); }
+.audio-btn[data-on="false"] .audio-eq i { animation: eqIdle 1.2s ease-in-out infinite; }
+.audio-btn[data-on="false"] .audio-eq i:nth-child(2) { animation-delay: 0.14s; }
+.audio-btn[data-on="false"] .audio-eq i:nth-child(3) { animation-delay: 0.28s; }
+.audio-btn[data-on="false"] .audio-eq i:nth-child(4) { animation-delay: 0.42s; }
+@keyframes eqIdle { 0%, 100% { height: 4px; } 50% { height: 13px; } }
+.audio-note { font-size: 0.78rem; color: var(--text-muted); letter-spacing: 1px; opacity: 0.75; }
+
+/* Toggle de volumen, aparece sólo cuando el audio está corriendo */
+.audio-toggle {
+  position: fixed; right: 22px; bottom: 22px; z-index: 1100;
+  width: 46px; height: 46px; border-radius: 50%;
+  display: none; align-items: center; justify-content: center;
+  background: rgba(12, 12, 16, 0.72);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #fff; cursor: pointer;
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.5);
+  transition: border-color 180ms ease, color 180ms ease, transform 160ms ease-out, background 180ms ease;
+}
+.audio-toggle.show { display: flex; }
+.audio-toggle:active { transform: scale(0.94); }
+.audio-toggle svg { width: 19px; height: 19px; }
+.audio-toggle[data-muted="false"] { color: var(--neon-cyan); border-color: rgba(0, 240, 255, 0.4); }
+.audio-toggle[data-muted="true"] { color: var(--text-muted); }
+
 /* HEADER */
 .header-wrapper {
   position: fixed; top: 24px; left: 0; right: 0;
@@ -157,47 +200,254 @@ nav a {
 }
 nav a:hover { color: #fff; text-shadow: 0 0 10px rgba(255,255,255,0.4); }
 
-/* HERO */
-.hero { padding: 200px 0 100px; text-align: center; position: relative; min-height: 100vh; display: flex; align-items: center; }
-.hero .container { width: 100%; }
-.hero .tagline {
+/* ═══════════════════════════════════════════════════════
+   🌌 NARRATIVA HERO SCROLLYTELLING (5 ETAPAS)
+   Caos → Ritmo → Túnel → Software → DJ Vlex
+   ═══════════════════════════════════════════════════════ */
+.narrative-hero {
+  position: relative;
+  width: 100%;
+  height: 450vh;
+}
+.narrative-sticky {
+  position: sticky;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  padding: 0 20px;
+}
+.narrative-stages {
+  position: relative;
+  width: min(92%, 840px);
+  min-height: 520px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.narrative-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -46%) scale(0.94);
+  width: 100%;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+              visibility 0.45s;
+}
+.narrative-card.active {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}
+.narrative-badge {
   display: inline-block;
-  padding: 10px 20px; border-radius: 100px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
-  backdrop-filter: blur(10px);
   font-family: 'Space Grotesk', monospace;
-  font-size: 0.95rem; color: var(--neon-cyan);
-  margin-bottom: 30px; letter-spacing: 2px; text-transform: uppercase;
+  font-size: 0.85rem;
+  letter-spacing: 2.5px;
+  color: var(--neon-cyan);
+  background: rgba(0, 240, 255, 0.08);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: 100px;
+  padding: 8px 22px;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+  box-shadow: 0 0 25px rgba(0, 240, 255, 0.25);
+}
+.narrative-title {
+  font-size: clamp(2.2rem, 5.8vw, 4.2rem);
+  font-weight: 900;
+  line-height: 1.08;
+  letter-spacing: -1.5px;
+  margin-bottom: 20px;
+  background: linear-gradient(135deg, #ffffff 0%, #e0e7ff 50%, var(--neon-cyan) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 25px rgba(0,0,0,0.9));
+}
+.narrative-desc {
+  font-size: clamp(1.1rem, 2vw, 1.38rem);
+  color: #d1d5db;
+  line-height: 1.65;
+  max-width: 660px;
+  margin: 0 auto 28px;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.9);
+  font-weight: 300;
+}
+.narrative-scroll-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.86rem;
+  font-family: 'Space Grotesk', monospace;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  animation: bounceDown 2s infinite ease-in-out;
+}
+@keyframes bounceDown {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+
+/* HUD Timeline de la Narrativa */
+.narrative-hud {
+  position: absolute;
+  top: 96px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  z-index: 50;
+  pointer-events: none;
+}
+.hud-phase-name {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.78rem;
+  letter-spacing: 2px;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+  text-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+.hud-timeline {
+  display: flex;
+  gap: 16px;
+  background: rgba(15, 15, 20, 0.75);
+  backdrop-filter: blur(25px);
+  -webkit-backdrop-filter: blur(25px);
+  padding: 6px 18px;
+  border-radius: 100px;
+  border: 1px solid rgba(255,255,255,0.12);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+}
+.hud-dot {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  transition: color 0.3s, text-shadow 0.3s;
+}
+.hud-dot.active {
+  color: #fff;
+  text-shadow: 0 0 10px var(--neon-cyan);
+  font-weight: 700;
+}
+.hud-progress-bar {
+  width: 140px;
+  height: 2px;
+  background: rgba(255,255,255,0.15);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.hud-progress-fill {
+  width: 0%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--neon-magenta), var(--neon-cyan));
+  box-shadow: 0 0 8px var(--neon-cyan);
+  transition: width 0.08s linear;
+}
+
+.narrative-audio-cta {
+  position: absolute;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 50;
+  margin-bottom: 0;
+  pointer-events: auto;
+}
+
+/* Stage 5 / Síntesis Final DJ Vlex */
+.hero-tagline {
+  display: inline-block;
+  padding: 8px 20px;
+  border-radius: 100px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.12);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  font-family: 'Space Grotesk', monospace;
+  font-size: 0.9rem;
+  color: var(--neon-cyan);
+  margin-bottom: 22px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
   box-shadow: 0 0 20px rgba(0, 240, 255, 0.2);
 }
-/* Logo con parallax 3D (movido por JS) */
-.hero-logo-wrap { transform-style: preserve-3d; will-change: transform; }
+.hero-logo-wrap {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
 .hero-logo {
-  width: min(85%, 620px); height: auto;
-  margin: 0 auto; display: block;
-  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 45px rgba(255, 0, 127, 0.4));
+  width: min(85%, 580px);
+  height: auto;
+  margin: 0 auto;
+  display: block;
+  filter: drop-shadow(0 20px 40px rgba(0,0,0,0.8)) drop-shadow(0 0 45px rgba(255, 0, 127, 0.45));
   animation: heroFloat 6s ease-in-out infinite;
 }
 @keyframes heroFloat {
   0%, 100% { transform: translateY(0) rotateX(0deg); }
-  50% { transform: translateY(-16px) rotateX(3deg); }
+  50% { transform: translateY(-14px) rotateX(2.5deg); }
 }
-.hero p {
-  font-size: 1.3rem; color: #d1d5db;
-  max-width: 680px; margin: 20px auto 50px;
-  line-height: 1.8; font-weight: 300;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.9);
+.hero-summary {
+  font-size: clamp(1.05rem, 1.8vw, 1.25rem);
+  color: #d1d5db;
+  line-height: 1.65;
+  max-width: 700px;
+  margin: 18px auto 28px;
+  text-shadow: 0 2px 10px rgba(0,0,0,0.9);
+  font-weight: 300;
 }
-.hero .cta { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; }
+.hero-cta-group {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
 .scroll-hint {
-  position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-  color: var(--text-muted); font-size: 0.8rem; letter-spacing: 3px; text-transform: uppercase;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
   animation: hintPulse 2.5s ease-in-out infinite;
 }
 @keyframes hintPulse {
-  0%, 100% { opacity: 0.4; transform: translate(-50%, 0); }
-  50% { opacity: 1; transform: translate(-50%, 8px); }
+  0%, 100% { opacity: 0.4; transform: translateY(0); }
+  50% { opacity: 1; transform: translateY(6px); }
+}
+
+@media (max-width: 680px) {
+  .narrative-hud { top: 76px; }
+  .hud-timeline .hud-dot span { display: none; }
+  .hud-timeline .hud-dot::after { content: "•"; font-size: 1.2rem; }
+  .hud-timeline { gap: 10px; padding: 4px 12px; }
+  .narrative-stages { min-height: 440px; }
+  .hero-cta-group { flex-direction: column; width: 100%; max-width: 320px; margin: 0 auto 20px; }
+  .narrative-audio-cta { bottom: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .narrative-hero { height: auto; }
+  .narrative-sticky { position: relative; height: auto; padding: 140px 20px 60px; }
+  .narrative-hud { display: none; }
+  .narrative-card { position: relative; top: auto; left: auto; transform: none; opacity: 1; visibility: visible; display: none; }
+  .narrative-card#stage4 { display: block; }
+  .hero-logo, .scroll-hint, .narrative-scroll-indicator { animation: none; }
 }
 
 /* STATS */
@@ -290,10 +540,13 @@ section h2 {
   .stats-grid { grid-template-columns: 1fr; }
   .hero .cta { flex-direction: column; }
   .btn-glass { width: 100%; }
+  .audio-btn { width: 100%; justify-content: center; }
+  .audio-toggle { right: 16px; bottom: 16px; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-logo, .scroll-hint { animation: none; }
   .reveal { opacity: 1; transform: none; transition: none; }
+  .audio-btn .audio-eq i { animation: none !important; }
 }
 </style>
 </head>
@@ -302,6 +555,14 @@ section h2 {
 <canvas id="scene3d" aria-hidden="true"></canvas>
 <div class="noise"></div>
 <div class="vignette"></div>
+
+<button class="audio-toggle" id="audioToggle" data-muted="false" aria-label="Silenciar audio" title="Silenciar audio">
+  <svg id="audioToggleIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+    <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+    <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+  </svg>
+</button>
 
 <div class="header-wrapper">
   <header>
@@ -315,19 +576,95 @@ section h2 {
   </header>
 </div>
 
-<section class="hero">
-  <div class="container">
-    <div class="tagline">🔥 Urban Vibes • Noches Inmersivas</div>
-    <div class="hero-logo-wrap" id="heroLogo">
-      <h1><img class="hero-logo" src="images/djvlex-wordmark.png" alt="DJ Vlex"></h1>
+<!-- NARRATIVA SCROLLYTELLING: 5 ETAPAS (CAOS → RITMO → TÚNEL → SOFTWARE → DJ VLEX) -->
+<section class="narrative-hero" id="narrativeHero">
+  <div class="narrative-sticky">
+    
+    <!-- HUD DE PROGRESO DE LA NARRATIVA -->
+    <div class="narrative-hud" id="narrativeHud" aria-hidden="true">
+      <div class="hud-phase-name" id="hudPhaseName">01 // CAOS</div>
+      <div class="hud-timeline">
+        <div class="hud-dot active" data-phase="0"><span>CAOS</span></div>
+        <div class="hud-dot" data-phase="1"><span>RITMO</span></div>
+        <div class="hud-dot" data-phase="2"><span>TÚNEL</span></div>
+        <div class="hud-dot" data-phase="3"><span>SOFTWARE</span></div>
+        <div class="hud-dot" data-phase="4"><span>DJ VLEX</span></div>
+      </div>
+      <div class="hud-progress-bar"><div class="hud-progress-fill" id="hudProgressFill"></div></div>
     </div>
-    <p>Especialista en ritmos urbanos con residencias en La Virgen y Trinity Restobar. <strong>Founder &amp; Lead Architect</strong> de <strong>TrackAI</strong> y <strong>PRE-SET</strong>, fusionando la energía en vivo con inteligencia artificial y software de vanguardia para DJs.</p>
-    <div class="cta">
-      <button class="btn-glass btn-primary" onclick="document.getElementById('contacto').scrollIntoView()">Contactar Ahora</button>
-      <a href="https://www.tiktok.com/@dj__vlex" target="_blank" class="btn-glass">Ver en TikTok Live</a>
+
+    <!-- AUDIO CTA FLOTANTE -->
+    <div class="audio-cta narrative-audio-cta">
+      <button class="audio-btn" id="audioBtn" data-on="false" aria-pressed="false">
+        <span class="audio-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span id="audioBtnLabel">Activar Experiencia Sonora</span>
+      </button>
+      <span class="audio-note" id="audioNote">Dembow 110 BPM reactivo en vivo 🔊</span>
+    </div>
+
+    <!-- PANELES DE CADA ETAPA -->
+    <div class="narrative-stages">
+      
+      <!-- ETAPA 1: CAOS / RUIDO -->
+      <div class="narrative-card active" id="stage0">
+        <div class="narrative-badge">01 // RUIDO &amp; CAOS</div>
+        <h2 class="narrative-title">DESORDEN. ENERGÍA PURA.</h2>
+        <p class="narrative-desc">Miles de tracks dispersos en la noche. Frecuencias sin pulso esperando dirección. De la energía cruda nace la materia prima del DJ.</p>
+        <div class="narrative-scroll-indicator">
+          <span>Desliza para ordenar la frecuencia</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <!-- ETAPA 2: RITMO / DEMBOW -->
+      <div class="narrative-card" id="stage1">
+        <div class="narrative-badge">02 // EL PULSO DEL DEMBOW</div>
+        <h2 class="narrative-title">EL BEAT TOMA CONTROL.</h2>
+        <p class="narrative-desc">Las partículas colapsan en órbitas concéntricas. El vinilo gira a 110 BPM. El sub-grave marca el pulso y la pista responde.</p>
+        <div class="narrative-scroll-indicator">
+          <span>Continúa hacia la cabina</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <!-- ETAPA 3: EL TÚNEL / SET EN VIVO -->
+      <div class="narrative-card" id="stage2">
+        <div class="narrative-badge">03 // ADENTRO DEL SET</div>
+        <h2 class="narrative-title">INMERSIÓN EN CABINA.</h2>
+        <p class="narrative-desc">Aceleración warp directa a la pista. Noches electrizantes y residencias oficiales en Trinity Restobar y La Virgen.</p>
+        <div class="narrative-scroll-indicator">
+          <span>Hacia la arquitectura digital</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <!-- ETAPA 4: SOFTWARE & IA -->
+      <div class="narrative-card" id="stage3">
+        <div class="narrative-badge">04 // SOFTWARE ARCHITECTURE</div>
+        <h2 class="narrative-title">CÓDIGO &amp; INTELIGENCIA.</h2>
+        <p class="narrative-desc">La nube se estructura en una matriz algorítmica. Founder de TrackAI y PRE-SET. Software de vanguardia creado por un DJ, para DJs.</p>
+        <div class="narrative-scroll-indicator">
+          <span>Convergencia final</span>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M19 12l-7 7-7-7"/></svg>
+        </div>
+      </div>
+
+      <!-- ETAPA 5: DJ VLEX SÍNTESIS -->
+      <div class="narrative-card" id="stage4">
+        <div class="hero-tagline">🔥 Urban Vibes • Noches Inmersivas</div>
+        <div class="hero-logo-wrap" id="heroLogo">
+          <h1><img class="hero-logo" src="images/djvlex-wordmark.png" alt="DJ Vlex"></h1>
+        </div>
+        <p class="hero-summary">Especialista en ritmos urbanos con residencias en La Virgen y Trinity Restobar. <strong>Founder &amp; Lead Architect</strong> de <strong>TrackAI</strong> y <strong>PRE-SET</strong>, fusionando la energía en vivo con inteligencia artificial y software de vanguardia.</p>
+        <div class="hero-cta-group">
+          <button class="btn-glass btn-primary" onclick="document.getElementById('contacto').scrollIntoView({behavior:'smooth'})">Contactar Ahora</button>
+          <a href="https://www.tiktok.com/@dj__vlex" target="_blank" rel="noopener" class="btn-glass">Ver en TikTok Live</a>
+        </div>
+        <div class="scroll-hint">▼ Explora residencias y proyectos</div>
+      </div>
+
     </div>
   </div>
-  <div class="scroll-hint">▼ Entra al túnel</div>
 </section>
 
 <section class="stats">
@@ -770,9 +1107,199 @@ section h2 {
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
 <script>
 /* ═══════════════════════════════════════════════════════
-   🌌 ESCENA 3D INMERSIVA — Three.js
-   Túnel de partículas warp + grilla neón infinita +
-   vinilo 3D girando + cámara que viaja con el scroll
+   🔊 MOTOR DE AUDIO REACTIVO — Web Audio API
+   Analiza el dembow real y expone bandas de frecuencia
+   (graves / medios / agudos) para que la escena reaccione.
+   Arranca sólo con click: todos los navegadores bloquean
+   el autoplay con audio.
+   ═══════════════════════════════════════════════════════ */
+var DJ_AUDIO = {
+  active: false,
+  failed: false,
+  ctx: null,
+  analyser: null,
+  data: null,
+  binHz: 0,
+  bass: 0, mid: 0, high: 0, level: 0, kick: 0,
+  lastKickAt: 0,
+  kickPulse: 0
+};
+
+(function () {
+  var btn = document.getElementById('audioBtn');
+  if (!btn) return;
+  var label = document.getElementById('audioBtnLabel');
+  var note = document.getElementById('audioNote');
+  var toggle = document.getElementById('audioToggle');
+
+  var AC = window.AudioContext || window.webkitAudioContext;
+  if (!AC) { DJ_AUDIO.failed = true; return; }
+
+  var el = new Audio('audio/dembow.mp3');
+  el.loop = true;
+  el.preload = 'none';
+  el.crossOrigin = 'anonymous';
+
+  function setBars(heightPx) {
+    var bars = btn.querySelectorAll('.audio-eq i');
+    for (var i = 0; i < bars.length; i++) bars[i].style.height = heightPx + 'px';
+  }
+
+  function start() {
+    // El context debe crearse dentro del gesto del usuario
+    var ctx = new AC();
+    var src = ctx.createMediaElementSource(el);
+    var analyser = ctx.createAnalyser();
+    /* 2048 = 21 Hz por bin a 44.1 kHz. Con 512 quedaban 86 Hz por bin y
+       la banda de graves caía en el bin de DC, que nunca tiene señal. */
+    analyser.fftSize = 2048;
+    analyser.smoothingTimeConstant = 0.6;
+    src.connect(analyser);
+    analyser.connect(ctx.destination);
+
+    DJ_AUDIO.ctx = ctx;
+    DJ_AUDIO.analyser = analyser;
+    DJ_AUDIO.data = new Uint8Array(analyser.frequencyBinCount);
+    DJ_AUDIO.binHz = ctx.sampleRate / analyser.fftSize;
+
+    var p = el.play();
+    if (p && p.catch) p.catch(function () { fail('No se pudo reproducir el audio'); });
+
+    if (ctx.state === 'suspended') ctx.resume();
+    DJ_AUDIO.active = true;
+    btn.dataset.on = 'true';
+    btn.setAttribute('aria-pressed', 'true');
+    label.textContent = 'Túnel activo';
+    note.textContent = 'Mute con el botón de abajo a la derecha';
+    toggle.classList.add('show');
+    el.volume = 1;
+  }
+
+  function fail(msg) {
+    DJ_AUDIO.failed = true;
+    DJ_AUDIO.active = false;
+    btn.disabled = true;
+    btn.dataset.on = 'false';
+    label.textContent = 'Audio no disponible';
+    note.textContent = msg;
+    setBars(4);
+  }
+
+  btn.addEventListener('click', function () {
+    if (DJ_AUDIO.failed) return;
+    if (!DJ_AUDIO.active) start();
+  });
+
+  toggle.addEventListener('click', function () {
+    if (!DJ_AUDIO.active) return;
+    var muted = el.muted;
+    el.muted = !muted;
+    toggle.dataset.muted = String(!muted);
+    var icon = document.getElementById('audioToggleIcon');
+    icon.innerHTML = muted
+      ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>'
+      : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>';
+    toggle.setAttribute('aria-label', muted ? 'Activar audio' : 'Silenciar audio');
+    toggle.title = muted ? 'Activar audio' : 'Silenciar audio';
+  });
+
+  // Si el archivo no existe o falla la red, no dejamos el botón muerto
+  el.addEventListener('error', function () { fail('No se encontró el archivo de audio'); });
+
+  /* Muestreo de bandas — se llama desde el render loop */
+  var SMOOTH = 0.28;
+  /* El dembow tiene graves muy cargados: el promedio crudo de la banda
+     ronda 0.85 casi siempre y no discrimina un kick de un sustain.
+     Restar el piso y escalar abre el rango útil para que la escena
+     realmente reaccione en vez de quedarse siempre al tope. */
+  var FLOOR = 0.62, SPAN = 0.34;
+
+  function remap(v) {
+    var n = (v - FLOOR) / SPAN;
+    return n < 0 ? 0 : n > 1 ? 1 : n;
+  }
+
+  /* Estado para la detección adaptativa de beat */
+  var beatHist = new Float32Array(43);   /* ~1.5s de historia a 60fps */
+  var beatIdx = 0, beatFill = 0;
+  var beatMean = 0, beatVar = 0;
+  var prevSnare = 0, prev2Snare = 0;
+
+  function pushBeat(v) {
+    var old = beatHist[beatIdx];
+    beatHist[beatIdx] = v;
+    beatIdx = (beatIdx + 1) % beatHist.length;
+    if (beatFill < beatHist.length) beatFill++;
+    else {
+      var sum = 0;
+      for (var i = 0; i < beatHist.length; i++) sum += beatHist[i];
+      var mean = sum / beatHist.length;
+      var sq = 0;
+      for (var j = 0; j < beatHist.length; j++) sq += (beatHist[j] - mean) * (beatHist[j] - mean);
+      beatMean = mean;
+      beatVar = sq / beatHist.length;
+    }
+  }
+
+  DJ_AUDIO.sample = function (tNow) {
+    if (!DJ_AUDIO.active) return;
+    var a = DJ_AUDIO.analyser, d = DJ_AUDIO.data;
+    a.getByteFrequencyData(d);
+
+    var hz = DJ_AUDIO.binHz;
+    /* El primer bin (DC) siempre es 0 y no aporta nada: se salta con hz*2 */
+    var b0 = Math.max(2, Math.floor(30 / hz)), b1 = Math.max(b0 + 1, Math.floor(140 / hz));
+    var m0 = b1, m1 = Math.max(m0 + 1, Math.floor(2000 / hz));
+    var h0 = m1, h1 = Math.min(d.length, Math.max(h0 + 1, Math.floor(9000 / hz)));
+
+    function avg(from, to) {
+      var sum = 0, n = 0;
+      for (var i = from; i < to; i++) { sum += d[i]; n++; }
+      return n ? sum / n / 255 : 0;
+    }
+
+    var bassRaw = remap(avg(b0, b1));
+    var midRaw = remap(avg(m0, m1));
+    var highRaw = remap(avg(h0, h1));
+
+    DJ_AUDIO.bass += (bassRaw - DJ_AUDIO.bass) * SMOOTH;
+    DJ_AUDIO.mid += (midRaw - DJ_AUDIO.mid) * SMOOTH;
+    DJ_AUDIO.high += (highRaw - DJ_AUDIO.high) * SMOOTH;
+    DJ_AUDIO.level = (DJ_AUDIO.bass + DJ_AUDIO.mid + DJ_AUDIO.high) / 3;
+
+    /* Detección de beat sobre la banda de snare (180-900 Hz).
+       Los graves del bombo están tan comprimidos que no sirven para
+       cortar el kick; el snare marca el pulso del dembow.
+       Umbral adaptativo (media + 1.3 desvíos) para seguir la mezcla
+       en vez de usar un número fijo, + pico local + refractorio. */
+    var snare = avg(Math.floor(180 / hz), Math.min(d.length, Math.floor(900 / hz)));
+    pushBeat(snare);
+
+    if (beatFill > 12) {
+      var sd = Math.sqrt(beatVar);
+      var thr = beatMean + 1.3 * sd;
+      if (snare > thr && snare >= prevSnare && snare > prev2Snare && tNow - DJ_AUDIO.lastKickAt > 0.20) {
+        DJ_AUDIO.kickPulse = 1;
+        DJ_AUDIO.lastKickAt = tNow;
+      }
+    }
+    prev2Snare = prevSnare;
+    prevSnare = snare;
+
+    DJ_AUDIO.kickPulse *= 0.88;
+    DJ_AUDIO.kick = DJ_AUDIO.kickPulse;
+
+    /* Las barras del botón siguen al volumen real */
+    var hpx = 4 + Math.min(1, DJ_AUDIO.level * 2.6) * 12;
+    setBars(Math.round(hpx));
+  };
+})();
+
+/* ═══════════════════════════════════════════════════════
+   🌌 ESCENA 3D MORFOLÓGICA CON SHADERS — Three.js
+   5 Formas Guiadas por Scroll y Audio Reactivo:
+   Caos → Ritmo (Vinilo) → Túnel Warp → Software Matrix → DJ Vlex Core
+   Inspirado en PRE-SET (preset.trackai.party)
    ═══════════════════════════════════════════════════════ */
 (function () {
   var canvas = document.getElementById('scene3d');
@@ -781,201 +1308,360 @@ section h2 {
 
   var renderer;
   try {
-    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false });
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
   } catch (e) { return; }
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+
+  var dpr = Math.min(window.devicePixelRatio || 1, 2);
+  renderer.setPixelRatio(dpr);
   renderer.setSize(window.innerWidth, window.innerHeight);
 
   var scene = new THREE.Scene();
   scene.background = new THREE.Color(0x030306);
-  scene.fog = new THREE.FogExp2(0x030306, 0.016);
 
-  var camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 0.1, 400);
-  camera.position.set(0, 0, 10);
+  var camera = new THREE.PerspectiveCamera(65, window.innerWidth / window.innerHeight, 0.1, 300);
+  camera.position.set(0, 0, 22);
 
-  var PALETTE = [0xff007f, 0x00f0ff, 0x8a2be2, 0xffb800];
+  /* Elementos del HUD y Scrollytelling */
+  var heroEl = document.getElementById('narrativeHero');
+  var hudPhaseName = document.getElementById('hudPhaseName');
+  var hudFill = document.getElementById('hudProgressFill');
+  var hudDots = document.querySelectorAll('.hud-dot');
+  var stageCards = [
+    document.getElementById('stage0'),
+    document.getElementById('stage1'),
+    document.getElementById('stage2'),
+    document.getElementById('stage3'),
+    document.getElementById('stage4')
+  ];
+  var phaseLabels = [
+    '01 // CAOS',
+    '02 // RITMO',
+    '03 // EL TÚNEL',
+    '04 // SOFTWARE',
+    '05 // DJ VLEX'
+  ];
 
-  /* ── Túnel de partículas (warp) ── */
-  var COUNT = window.innerWidth < 700 ? 1500 : 3500;
-  var TUNNEL_LEN = 260;
-  var positions = new Float32Array(COUNT * 3);
-  var colors = new Float32Array(COUNT * 3);
-  var col = new THREE.Color();
+  /* ── CONSTRUCCIÓN DE LAS 5 FORMAS (22,000 Partículas en GPU) ── */
+  var COUNT = window.innerWidth < 768 ? 14000 : 22000;
+  var posChaos  = new Float32Array(COUNT * 3);
+  var posRhythm = new Float32Array(COUNT * 3);
+  var posTunnel = new Float32Array(COUNT * 3);
+  var posMatrix = new Float32Array(COUNT * 3);
+  var posCore   = new Float32Array(COUNT * 3);
+  var seeds     = new Float32Array(COUNT);
+
+  var cols = 40, rows = 25;
+  var layers = Math.ceil(COUNT / (cols * rows));
+
   for (var i = 0; i < COUNT; i++) {
-    var angle = Math.random() * Math.PI * 2;
-    var radius = 6 + Math.random() * 26;
-    positions[i * 3] = Math.cos(angle) * radius;
-    positions[i * 3 + 1] = Math.sin(angle) * radius;
-    positions[i * 3 + 2] = -Math.random() * TUNNEL_LEN;
-    col.setHex(PALETTE[(Math.random() * PALETTE.length) | 0]);
-    colors[i * 3] = col.r; colors[i * 3 + 1] = col.g; colors[i * 3 + 2] = col.b;
-  }
-  var pGeo = new THREE.BufferGeometry();
-  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-  pGeo.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-  var pMat = new THREE.PointsMaterial({
-    size: 0.35, vertexColors: true, transparent: true, opacity: 0.9,
-    blending: THREE.AdditiveBlending, depthWrite: false, sizeAttenuation: true
-  });
-  var particles = new THREE.Points(pGeo, pMat);
-  scene.add(particles);
+    var seed = Math.random();
+    seeds[i] = seed;
 
-  /* ── Grillas neón infinitas (piso y techo) ── */
-  function makeGrid(y, c1, c2) {
-    var g = new THREE.GridHelper(400, 80, c1, c2);
-    g.position.y = y;
-    g.material.transparent = true;
-    g.material.opacity = 0.22;
-    g.material.blending = THREE.AdditiveBlending;
-    g.material.depthWrite = false;
-    scene.add(g);
-    return g;
-  }
-  var gridFloor = makeGrid(-14, 0xff007f, 0x2a0a3a);
-  var gridCeil  = makeGrid(16, 0x00f0ff, 0x0a2a3a);
+    /* 1. Forma 0: Caos / Nebulosa galáctica dispersa */
+    var r0 = Math.pow(Math.random(), 0.55) * 22.0 + 0.5;
+    var arm = (i % 3) * (Math.PI * 2 / 3);
+    var ang0 = arm + r0 * 0.42 + (Math.random() - 0.5) * 1.1;
+    posChaos[i * 3]     = Math.cos(ang0) * r0 + (Math.random() - 0.5) * 1.8;
+    posChaos[i * 3 + 1] = (Math.random() - 0.5) * (8.0 * (1.0 - r0 / 25.0));
+    posChaos[i * 3 + 2] = Math.sin(ang0) * r0 + (Math.random() - 0.5) * 1.8;
 
-  /* ── Anillos del túnel ── */
-  var rings = [];
-  var ringGeo = new THREE.TorusGeometry(15, 0.07, 8, 72);
-  for (var r = 0; r < 12; r++) {
-    var rMat = new THREE.MeshBasicMaterial({
-      color: PALETTE[r % PALETTE.length], transparent: true, opacity: 0.35,
-      blending: THREE.AdditiveBlending
-    });
-    var ring = new THREE.Mesh(ringGeo, rMat);
-    ring.position.z = -r * 24;
-    scene.add(ring);
-    rings.push(ring);
-  }
+    /* 2. Forma 1: Ritmo / Surcos concéntricos de Vinilo DJ */
+    var groove = Math.floor(Math.pow(Math.random(), 0.65) * 20);
+    var ringR = 2.0 + groove * 0.65;
+    var ang1 = Math.random() * Math.PI * 2;
+    var dr1 = (Math.random() - 0.5) * 0.12;
+    posRhythm[i * 3]     = Math.cos(ang1) * (ringR + dr1);
+    posRhythm[i * 3 + 1] = (Math.random() - 0.5) * 0.15;
+    posRhythm[i * 3 + 2] = Math.sin(ang1) * (ringR + dr1);
 
-  /* ── Logos 3D flotando en el túnel (pasan hacia la cámara) ── */
-  var logoPlanes = [];
-  new THREE.TextureLoader().load('images/djvlex-logo.png', function (tex) {
-    var aspect = tex.image.width / tex.image.height;
-    var LOGO_N = 7;
-    for (var li = 0; li < LOGO_N; li++) {
-      var lh = 8, lw = lh * aspect;
-      var mat = new THREE.MeshBasicMaterial({
-        map: tex, transparent: true, opacity: 0.95,
-        depthWrite: false, side: THREE.DoubleSide
-      });
-      var plane = new THREE.Mesh(new THREE.PlaneGeometry(lw, lh), mat);
-      var side = li % 2 === 0 ? 1 : -1;
-      plane.position.set(side * (7 + Math.random() * 5), (Math.random() - 0.5) * 8, -25 - li * 34);
-      plane.rotation.y = -side * 0.5;
-      plane.userData = { side: side, seed: Math.random() * Math.PI * 2 };
-      scene.add(plane);
-      logoPlanes.push(plane);
+    /* 3. Forma 2: Túnel Warp Cilíndrico */
+    var ang2 = (i * 0.12) + (Math.random() - 0.5) * 0.4;
+    var tunR = 4.2 + Math.random() * 2.8;
+    posTunnel[i * 3]     = Math.cos(ang2) * tunR;
+    posTunnel[i * 3 + 1] = Math.sin(ang2) * tunR;
+    posTunnel[i * 3 + 2] = (Math.random() * 80.0) - 40.0;
+
+    /* 4. Forma 3: Matriz de Software / Red Algorítmica (TrackAI / PRE-SET) */
+    var c = i % cols;
+    var row = Math.floor(i / cols) % rows;
+    var lyr = Math.floor(i / (cols * rows));
+    posMatrix[i * 3]     = (c / (cols - 1) - 0.5) * 15.0;
+    posMatrix[i * 3 + 1] = (0.5 - row / (rows - 1)) * 9.5;
+    posMatrix[i * 3 + 2] = (lyr - layers * 0.5) * 2.8 + (Math.random() - 0.5) * 0.15;
+
+    /* 5. Forma 4: Convergencia DJ Vlex / Corona y Halo Radiante */
+    if (i % 3 === 0) {
+      var hAng = Math.random() * Math.PI * 2;
+      var hR = 5.2 + (Math.random() - 0.5) * 0.9;
+      posCore[i * 3]     = Math.cos(hAng) * hR;
+      posCore[i * 3 + 1] = Math.sin(hAng) * hR;
+      posCore[i * 3 + 2] = (Math.random() - 0.5) * 1.2;
+    } else {
+      var phi = Math.acos(2.0 * Math.random() - 1.0);
+      var theta = Math.random() * Math.PI * 2;
+      var sRad = 2.6 + Math.pow(Math.random(), 2.0) * 8.5;
+      posCore[i * 3]     = sRad * Math.sin(phi) * Math.cos(theta);
+      posCore[i * 3 + 1] = sRad * Math.sin(phi) * Math.sin(theta);
+      posCore[i * 3 + 2] = sRad * Math.cos(phi);
     }
+  }
+
+  var geometry = new THREE.BufferGeometry();
+  geometry.setAttribute('position', new THREE.BufferAttribute(posChaos, 3));
+  geometry.setAttribute('aRhythm',  new THREE.BufferAttribute(posRhythm, 3));
+  geometry.setAttribute('aTunnel',  new THREE.BufferAttribute(posTunnel, 3));
+  geometry.setAttribute('aMatrix',  new THREE.BufferAttribute(posMatrix, 3));
+  geometry.setAttribute('aCore',    new THREE.BufferAttribute(posCore, 3));
+  geometry.setAttribute('aSeed',    new THREE.BufferAttribute(seeds, 1));
+
+  /* GLSL SHADER MATERIAL (100% GPU) */
+  var vertexShader = [
+    'uniform float uP;',
+    'uniform float uT;',
+    'uniform float uPx;',
+    'uniform float uBass;',
+    'uniform float uMid;',
+    'uniform float uHigh;',
+    'uniform float uKick;',
+
+    'attribute vec3 aRhythm;',
+    'attribute vec3 aTunnel;',
+    'attribute vec3 aMatrix;',
+    'attribute vec3 aCore;',
+    'attribute float aSeed;',
+
+    'varying vec3 vColor;',
+    'varying float vAlpha;',
+
+    'const vec3 C_PURPLE = vec3(0.60, 0.08, 0.95);',
+    'const vec3 C_PINK   = vec3(1.00, 0.00, 0.50);',
+    'const vec3 C_CYAN   = vec3(0.00, 0.94, 1.00);',
+    'const vec3 C_GREEN  = vec3(0.00, 1.00, 0.65);',
+    'const vec3 C_GOLD   = vec3(1.00, 0.78, 0.20);',
+    'const vec3 C_WHITE  = vec3(1.00, 1.00, 1.00);',
+
+    'float ease(float t) {',
+    '  return t * t * (3.0 - 2.0 * t);',
+    '}',
+
+    'void main() {',
+    '  float s0 = ease(clamp((uP - 0.12) / 0.16, 0.0, 1.0));', // Caos -> Ritmo
+    '  float s1 = ease(clamp((uP - 0.35) / 0.16, 0.0, 1.0));', // Ritmo -> Túnel
+    '  float s2 = ease(clamp((uP - 0.58) / 0.16, 0.0, 1.0));', // Túnel -> Software
+    '  float s3 = ease(clamp((uP - 0.80) / 0.14, 0.0, 1.0));', // Software -> Core
+
+    '  vec3 p0 = position;',
+    '  vec3 p1 = aRhythm;',
+    '  vec3 p2 = aTunnel;',
+    '  vec3 p3 = aMatrix;',
+    '  vec3 p4 = aCore;',
+
+    '  /* Dinámicas Caos */',
+    '  float a0 = uT * 0.12 + aSeed * 6.28;',
+    '  p0 += vec3(sin(a0 + p0.y * 0.25), cos(a0 * 1.3 + p0.x * 0.2), sin(a0 * 0.8 + p0.z * 0.25)) * (0.35 + uBass * 0.9);',
+
+    '  /* Giro de vinilo en Ritmo */',
+    '  float spin = uT * (0.8 + uBass * 0.5);',
+    '  float cS = cos(spin); float sS = sin(spin);',
+    '  p1.xz = mat2(cS, -sS, sS, cS) * p1.xz;',
+    '  p1.y += sin(uT * 3.5 + aSeed * 12.0) * (0.06 + uKick * 0.28);',
+
+    '  /* Vuelo del túnel */',
+    '  float spd = uT * (4.5 + uBass * 14.0);',
+    '  p2.z = mod(p2.z + spd, 70.0) - 45.0;',
+    '  float tRot = p2.z * 0.06 + uT * 0.4;',
+    '  float cT = cos(tRot); float sT = sin(tRot);',
+    '  p2.xy = mat2(cT, -sT, sT, cT) * p2.xy;',
+
+    '  /* Pulso matricial en Software */',
+    '  if (s2 > 0.01 && s3 < 0.99) {',
+    '    p3.y += sin(uT * 4.0 + p3.x * 2.0) * (0.06 + uMid * 0.22);',
+    '    if (mod(aSeed * 80.0, 5.0) < 1.0) {',
+    '      p3.x += sin(uT * 18.0) * 0.18 * uMid;',
+    '    }',
+    '  }',
+
+    '  /* Pulso y respiración en el Core DJ Vlex */',
+    '  float corePulse = sin(uT * 2.2 + aSeed * 6.0) * 0.12 + uKick * 0.55;',
+    '  p4 += normalize(p4 + 0.0001) * corePulse;',
+
+    '  /* Interpolación Morfológica Continua */',
+    '  vec3 p = mix(p0, p1, s0);',
+    '  p = mix(p, p2, s1);',
+    '  p = mix(p, p3, s2);',
+    '  p = mix(p, p4, s3);',
+
+    '  p += normalize(p + 0.001) * (uKick * 0.35);',
+
+    '  vec4 mv = modelViewMatrix * vec4(p, 1.0);',
+    '  gl_Position = projectionMatrix * mv;',
+
+    '  /* Tamaño reactivo con atenuación por distancia */',
+    '  float baseSz = mix(2.2, 3.4, aSeed);',
+    '  float kickSz = 1.0 + uKick * 0.65 + uHigh * 0.35;',
+    '  gl_PointSize = min(baseSz * kickSz * uPx * (68.0 / max(1.0, -mv.z)), 18.0 * uPx);',
+
+    '  /* Paletas dinámicas por etapa */',
+    '  vec3 col0 = mix(C_PURPLE, C_PINK, aSeed);',
+    '  vec3 col1 = mix(C_PINK, C_CYAN, sin(aSeed * 6.28 + uT) * 0.5 + 0.5);',
+    '  vec3 col2 = mix(C_CYAN, C_PINK, clamp((p.z + 45.0) / 60.0, 0.0, 1.0));',
+    '  vec3 col3 = mix(C_CYAN, C_GREEN, aSeed);',
+    '  vec3 col4 = mix(C_PINK, C_GOLD, aSeed);',
+    '  col4 = mix(col4, C_WHITE, uKick * 0.65);',
+
+    '  vec3 col = mix(col0, col1, s0);',
+    '  col = mix(col, col2, s1);',
+    '  col = mix(col, col3, s2);',
+    '  col = mix(col, col4, s3);',
+
+    '  vColor = col;',
+    '  vAlpha = mix(0.55, 0.95, aSeed) + uKick * 0.22;',
+    '}'
+  ].join("\n");
+
+  var fragmentShader = [
+    'varying vec3 vColor;',
+    'varying float vAlpha;',
+
+    'void main() {',
+    '  vec2 coord = gl_PointCoord - vec2(0.5);',
+    '  float dist = length(coord);',
+    '  if (dist > 0.5) discard;',
+    '  float glow = smoothstep(0.5, 0.0, dist);',
+    '  float core = smoothstep(0.18, 0.0, dist);',
+    '  vec3 col = vColor + vec3(core * 0.35);',
+    '  gl_FragColor = vec4(col, vAlpha * glow);',
+    '}'
+  ].join("\n");
+
+  var material = new THREE.ShaderMaterial({
+    uniforms: {
+      uP:    { value: 0.0 },
+      uT:    { value: 0.0 },
+      uPx:   { value: dpr },
+      uBass: { value: 0.0 },
+      uMid:  { value: 0.0 },
+      uHigh: { value: 0.0 },
+      uKick: { value: 0.0 }
+    },
+    vertexShader: vertexShader,
+    fragmentShader: fragmentShader,
+    transparent: true,
+    blending: THREE.AdditiveBlending,
+    depthWrite: false
   });
 
-  /* ── Luces ── */
-  scene.add(new THREE.AmbientLight(0x223344, 0.6));
-  var lightPink = new THREE.PointLight(0xff007f, 3.5, 90);
-  lightPink.position.set(-18, 10, -20);
-  scene.add(lightPink);
-  var lightCyan = new THREE.PointLight(0x00f0ff, 3.5, 90);
-  lightCyan.position.set(18, -10, -25);
-  scene.add(lightCyan);
-  var lightPurple = new THREE.PointLight(0x8a2be2, 2.5, 70);
-  lightPurple.position.set(0, 16, -40);
-  scene.add(lightPurple);
+  var particleSystem = new THREE.Points(geometry, material);
+  scene.add(particleSystem);
 
-  /* ── Interacción: mouse + scroll + boost ── */
+  /* Grilla de soporte que emerge durante el túnel y software */
+  var gridFloor = new THREE.GridHelper(300, 60, 0x00f0ff, 0x2a0a3a);
+  gridFloor.position.y = -10;
+  gridFloor.material.transparent = true;
+  gridFloor.material.opacity = 0.0;
+  gridFloor.material.blending = THREE.AdditiveBlending;
+  gridFloor.material.depthWrite = false;
+  scene.add(gridFloor);
+
+  /* ── Interacción: mouse parallax y scroll progress ── */
   var mx = 0, my = 0, tmx = 0, tmy = 0;
   window.addEventListener('mousemove', function (e) {
     tmx = (e.clientX / window.innerWidth - 0.5) * 2;
     tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   });
-  var boost = 0;
-  window.addEventListener('wheel', function (e) {
-    boost = Math.min(boost + Math.abs(e.deltaY) * 0.004, 5);
-  }, { passive: true });
 
-  var scrollProgress = 0;
-  function onScroll() {
-    var max = document.documentElement.scrollHeight - window.innerHeight;
-    scrollProgress = max > 0 ? window.scrollY / max : 0;
+  var targetProgress = 0;
+  var currentProgress = 0;
+
+  function updateScroll() {
+    if (!heroEl) return;
+    var rect = heroEl.getBoundingClientRect();
+    var total = heroEl.offsetHeight - window.innerHeight;
+    if (total <= 0) { targetProgress = 0; return; }
+    var scrolled = -rect.top;
+    targetProgress = Math.max(0, Math.min(1, scrolled / total));
   }
-  window.addEventListener('scroll', onScroll, { passive: true });
-  onScroll();
+  window.addEventListener('scroll', updateScroll, { passive: true });
+  updateScroll();
 
   window.addEventListener('resize', function () {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight);
+    material.uniforms.uPx.value = Math.min(window.devicePixelRatio || 1, 2);
+    updateScroll();
   });
 
   var clock = new THREE.Clock();
 
   function render() {
     var t = clock.getElapsedTime();
-    var dt = Math.min(clock.getDelta ? 0.016 : 0.016, 0.05);
 
-    /* Suavizar mouse */
+    /* Muestrear motor de audio reactivo si está activo */
+    if (window.DJ_AUDIO && window.DJ_AUDIO.sample) {
+      window.DJ_AUDIO.sample(t);
+    }
+    var hasAudio = window.DJ_AUDIO && window.DJ_AUDIO.active;
+    var BASS = hasAudio ? window.DJ_AUDIO.bass : (Math.sin(t * 1.6) * 0.08 + 0.08);
+    var MID  = hasAudio ? window.DJ_AUDIO.mid  : (Math.cos(t * 2.2) * 0.05 + 0.05);
+    var HIGH = hasAudio ? window.DJ_AUDIO.high : 0.05;
+    var KICK = hasAudio ? window.DJ_AUDIO.kick : (Math.max(0, Math.sin(t * 2.8)) * 0.12);
+
+    /* Suavizado continuo de scroll (lerp para 60fps) */
+    currentProgress += (targetProgress - currentProgress) * 0.12;
+
+    /* Actualizar uniforms */
+    material.uniforms.uP.value = currentProgress;
+    material.uniforms.uT.value = t;
+    material.uniforms.uBass.value = BASS;
+    material.uniforms.uMid.value  = MID;
+    material.uniforms.uHigh.value = HIGH;
+    material.uniforms.uKick.value = KICK;
+
+    /* Suavizar mouse parallax */
     mx += (tmx - mx) * 0.05;
     my += (tmy - my) * 0.05;
 
-    /* Warp de partículas */
-    var speed = (reduceMotion ? 0.6 : 3.2) + boost * 8;
-    boost *= 0.94;
-    var pos = pGeo.attributes.position.array;
-    for (var i = 0; i < COUNT; i++) {
-      pos[i * 3 + 2] += speed * 0.06;
-      if (pos[i * 3 + 2] > camera.position.z + 4) pos[i * 3 + 2] -= TUNNEL_LEN;
-    }
-    pGeo.attributes.position.needsUpdate = true;
+    /* Trayectoria de cámara adaptada a la narrativa */
+    var camZ = 22.0 - currentProgress * 6.0;
+    var camY = Math.sin(currentProgress * Math.PI) * 2.5;
+    camera.position.z = camZ;
+    camera.position.x = mx * 2.5;
+    camera.position.y = camY - my * 2.0;
+    camera.lookAt(0, 0, 0);
 
-    /* Cámara viaja por el túnel con el scroll + parallax con el mouse */
-    var targetZ = 10 - scrollProgress * 150;
-    camera.position.z += (targetZ - camera.position.z) * 0.06;
-    camera.position.x += (mx * 4 - camera.position.x) * 0.04;
-    camera.position.y += (-my * 3 - camera.position.y) * 0.04;
-    camera.lookAt(camera.position.x * 0.4, camera.position.y * 0.4, camera.position.z - 30);
-    camera.rotation.z = mx * 0.05 + Math.sin(t * 0.2) * 0.02;
+    /* Grilla de soporte neón: emerge con el túnel y software */
+    var gridOp = Math.sin(Math.max(0, Math.min(1, (currentProgress - 0.25) / 0.55)) * Math.PI) * 0.24;
+    gridFloor.material.opacity = gridOp * (1.0 + BASS * 0.8);
+    gridFloor.position.z = -currentProgress * 40.0;
 
-    /* Anillos: reciclar detrás de la cámara + pulso */
-    for (var r2 = 0; r2 < rings.length; r2++) {
-      var ring = rings[r2];
-      if (ring.position.z > camera.position.z + 6) ring.position.z -= rings.length * 24;
-      var pulse = 1 + Math.sin(t * 2.4 + r2 * 1.3) * 0.04;
-      ring.scale.set(pulse, pulse, 1);
-      ring.rotation.z = t * 0.12 * (r2 % 2 === 0 ? 1 : -1);
-    }
+    /* Sincronización de HUD y Paneles */
+    var activeStage = 0;
+    if (currentProgress < 0.18) activeStage = 0;
+    else if (currentProgress < 0.38) activeStage = 1;
+    else if (currentProgress < 0.62) activeStage = 2;
+    else if (currentProgress < 0.84) activeStage = 3;
+    else activeStage = 4;
 
-    /* Logos: avanzan hacia la cámara y se reciclan al fondo del túnel */
-    for (var li2 = 0; li2 < logoPlanes.length; li2++) {
-      var lp = logoPlanes[li2];
-      lp.position.z += speed * 0.06;
-      if (lp.position.z > camera.position.z + 6) {
-        lp.position.z -= logoPlanes.length * 34;
-        lp.userData.side *= -1;
-        lp.position.x = lp.userData.side * (7 + Math.random() * 5);
-        lp.position.y = (Math.random() - 0.5) * 8;
+    for (var s = 0; s < stageCards.length; s++) {
+      if (stageCards[s]) {
+        if (s === activeStage) stageCards[s].classList.add('active');
+        else stageCards[s].classList.remove('active');
       }
-      lp.rotation.y = -lp.userData.side * 0.5 + Math.sin(t * 0.5 + lp.userData.seed) * 0.12;
-      lp.position.y += Math.sin(t * 0.8 + lp.userData.seed) * 0.008;
-      /* Se desvanece suave al acercarse */
-      var dist = camera.position.z - lp.position.z;
-      lp.material.opacity = Math.min(Math.max(dist / 18, 0), 0.95);
     }
 
-    /* Grillas siguen a la cámara (infinitas) + luces pulsando al beat */
-    gridFloor.position.z = camera.position.z - 100;
-    gridCeil.position.z = camera.position.z - 100;
-    var beat = 1 + Math.max(0, Math.sin(t * 3.6)) * 0.5;
-    lightPink.intensity = 3.5 * beat;
-    lightCyan.intensity = 3.5 * (2 - beat);
-    lightPink.position.z = camera.position.z - 20;
-    lightCyan.position.z = camera.position.z - 25;
-    lightPurple.position.z = camera.position.z - 40;
+    if (hudPhaseName) hudPhaseName.textContent = phaseLabels[activeStage];
+    if (hudFill) hudFill.style.width = (currentProgress * 100).toFixed(1) + '%';
+    hudDots.forEach(function(dot, idx) {
+      if (idx === activeStage) dot.classList.add('active');
+      else dot.classList.remove('active');
+    });
 
     renderer.render(scene, camera);
     requestAnimationFrame(render);
   }
 
   if (reduceMotion) {
-    /* Un solo frame estático para usuarios con motion reducido */
     renderer.render(scene, camera);
   } else {
     requestAnimationFrame(render);
@@ -1004,17 +1690,34 @@ section h2 {
   });
 })();
 
-/* ── Parallax 3D del logo del hero ── */
+/* ── Parallax 3D del logo del hero + vibración con los graves ── */
 (function () {
   var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (reduceMotion) return;
   var el = document.getElementById('heroLogo');
   if (!el) return;
+  var mx = 0, my = 0, tmx = 0, tmy = 0, shake = 0;
+
   window.addEventListener('mousemove', function (e) {
-    var mx = (e.clientX / window.innerWidth - 0.5) * 2;
-    var my = (e.clientY / window.innerHeight - 0.5) * 2;
-    el.style.transform = 'perspective(900px) rotateY(' + (mx * 8).toFixed(2) + 'deg) rotateX(' + (-my * 6).toFixed(2) + 'deg)';
+    tmx = (e.clientX / window.innerWidth - 0.5) * 2;
+    tmy = (e.clientY / window.innerHeight - 0.5) * 2;
   });
+
+  /* Loop propio en vez de rAF suelto: el logo se actualiza siempre,
+     aunque el Three.js esté pausado. */
+  function tick() {
+    mx += (tmx - mx) * 0.06;
+    my += (tmy - my) * 0.06;
+    /* Los graves empujan el logo hacia la cámara y lo sacan de vuelta */
+    var target = DJ_AUDIO.active ? DJ_AUDIO.bass * 14 : 0;
+    shake += (target - shake) * 0.18;
+    el.style.transform =
+      'perspective(900px) translateZ(' + shake.toFixed(2) + 'px) ' +
+      'rotateY(' + (mx * 8).toFixed(2) + 'deg) ' +
+      'rotateX(' + (-my * 6).toFixed(2) + 'deg)';
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 
 /* ── Reveal 3D al hacer scroll ── */
